@@ -4,6 +4,24 @@
 
 ## 📅 Current Session - June 6, 2025
 
+### 🎨 **MOVEMENT TUNING: Smoother Wandering**
+**Date**: Current session  
+**Issue**: Wandering creatures had too much jitter relative to forward movement
+
+**Adjustments Made**:
+- **Reduced Continuous Jitter**: From 0.1 to 0.02 for gentler curves
+- **Longer Direction Persistence**: Doubled timer intervals (60-180 frames instead of 30-90)
+- **Stronger Momentum**: Minimum 85% direction persistence for smoother paths
+- **Conditional Micro-Jitter**: Only very jittery personalities (>0.8) get micro-movements
+- **Smaller Direction Changes**: Reduced major direction changes from 2x to 1.5x jitteriness
+- **Standard Speed Limit**: Removed 1.2x speed multiplier for more predictable movement
+
+**Result**: Wandering creatures now move in smooth, flowing paths with gentle curves instead of nervous jittering.
+
+**Next**: Test the improved wandering behavior.
+
+---
+
 ### 🎨 **MOVEMENT ENHANCEMENT: Natural Creature Behavior**
 **Date**: Current session
 **Reason**: Creatures felt "robotic" with too-predictable movement patterns

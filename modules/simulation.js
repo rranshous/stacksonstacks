@@ -88,30 +88,32 @@ export class Simulation {
         personality.wanderTimer += 1;
         
         // Occasionally make bigger direction changes (creates more interesting paths)
-        if (personality.wanderTimer > (30 + Math.random() * 60)) {
-            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 2;
+        if (personality.wanderTimer > (60 + Math.random() * 120)) {
+            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 1.5;
             personality.wanderTimer = 0;
         }
         
-        // Small continuous adjustments based on jitteriness
-        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.1;
+        // Very small continuous adjustments for gentle curves (much reduced)
+        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.02;
         
         // Calculate target velocity from wander angle
         const targetSpeed = speed * personality.speedVariation;
         const targetVx = Math.cos(personality.wanderAngle) * targetSpeed;
         const targetVy = Math.sin(personality.wanderAngle) * targetSpeed;
         
-        // Smoothly transition to target velocity (based on direction persistence)
-        const persistence = personality.directionPersistence;
+        // Much stronger direction persistence for smoother movement
+        const persistence = Math.max(0.85, personality.directionPersistence);
         creature.vx = creature.vx * persistence + targetVx * (1 - persistence);
         creature.vy = creature.vy * persistence + targetVy * (1 - persistence);
         
-        // Add micro-jitter for liveliness
-        creature.vx += (Math.random() - 0.5) * personality.jitteriness * 0.05;
-        creature.vy += (Math.random() - 0.5) * personality.jitteriness * 0.05;
+        // Minimal micro-jitter - only for very jittery personalities
+        if (personality.jitteriness > 0.8) {
+            creature.vx += (Math.random() - 0.5) * (personality.jitteriness - 0.8) * 0.1;
+            creature.vy += (Math.random() - 0.5) * (personality.jitteriness - 0.8) * 0.1;
+        }
         
         // Limit speed to prevent runaway acceleration
-        this.limitSpeed(creature, speed * 1.2);
+        this.limitSpeed(creature, speed);
     }
     
     chaseBehavior(creature, speed) {
