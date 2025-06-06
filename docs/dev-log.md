@@ -4,6 +4,45 @@
 
 ## 📅 Current Session - June 6, 2025
 
+### 🎨 **MOVEMENT ENHANCEMENT: Natural Creature Behavior**
+**Date**: Current session
+**Reason**: Creatures felt "robotic" with too-predictable movement patterns
+
+**Improvements Added**:
+- **Personality Traits**: Each creature gets random personality on creation:
+  - `jitteriness` (0.5-1.0) - How much they wiggle and dart around
+  - `speedVariation` (0.8-1.2) - Individual speed differences
+  - `directionPersistence` (0.7-1.0) - How much they stick to current direction
+  - `wanderAngle` & `wanderTimer` - For more natural wandering paths
+
+**Enhanced Wandering Behavior**:
+- **Direction Persistence**: Creatures tend to continue in current direction rather than random each frame
+- **Periodic Direction Changes**: Big direction changes every 30-90 frames instead of constant tiny adjustments  
+- **Micro-Jitter**: Small continuous movement variations based on personality
+- **Variable Speeds**: Each creature moves at slightly different speeds
+
+**Personality Applied to All Behaviors**:
+- **Chase**: Jittery creatures move more erratically when chasing
+- **Flee**: More panic jitter when fleeing from mouse
+- **Orbit**: Orbital wobble based on jitteriness level
+- **Seek-Targets**: Excitement jitter when seeking clicked targets
+
+**Benefits**:
+- **Lifelike Movement**: Creatures feel more organic and less mechanical
+- **Individual Character**: Each creature has its own movement style
+- **Visual Interest**: More varied and unpredictable paths
+- **Emergent Behavior**: Personality combinations create unique interactions
+
+**Technical Implementation**:
+- Personality traits stored on creature objects during `updateCreature()`
+- Enhanced `wanderBehavior()` with angle-based movement and timing
+- All behaviors now incorporate personality-based variations
+- Backward compatible with existing creature data
+
+**Next Step**: Test the enhanced movement patterns and observe creature behavior.
+
+---
+
 ### 🎨 **UI IMPROVEMENT: Side-by-Side Layout**
 **Date**: Current session
 **Reason**: Controls were below the fold, making interactions less intuitive

@@ -36,6 +36,17 @@ export class Simulation {
     }
     
     updateCreature(creature, behavior, speed, deltaTime) {
+        // Initialize creature personality traits if not set
+        if (!creature.personality) {
+            creature.personality = {
+                jitteriness: 0.5 + Math.random() * 0.5, // 0.5 to 1.0
+                speedVariation: 0.8 + Math.random() * 0.4, // 0.8 to 1.2
+                directionPersistence: 0.7 + Math.random() * 0.3, // 0.7 to 1.0
+                wanderAngle: Math.random() * Math.PI * 2,
+                wanderTimer: 0
+            };
+        }
+        
         // Apply behavior (pure logic, no DOM)
         switch (behavior) {
             case 'wander':
@@ -71,12 +82,36 @@ export class Simulation {
     }
     
     wanderBehavior(creature, speed) {
-        // Add some randomness to velocity
-        creature.vx += (Math.random() - 0.5) * 0.1;
-        creature.vy += (Math.random() - 0.5) * 0.1;
+        const personality = creature.personality;
         
-        // Limit velocity
-        this.limitSpeed(creature, speed);
+        // Update wander timer
+        personality.wanderTimer += 1;
+        
+        // Occasionally make bigger direction changes (creates more interesting paths)
+        if (personality.wanderTimer > (30 + Math.random() * 60)) {
+            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 2;
+            personality.wanderTimer = 0;
+        }
+        
+        // Small continuous adjustments based on jitteriness
+        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.1;
+        
+        // Calculate target velocity from wander angle
+        const targetSpeed = speed * personality.speedVariation;
+        const targetVx = Math.cos(personality.wanderAngle) * targetSpeed;
+        const targetVy = Math.sin(personality.wanderAngle) * targetSpeed;
+        
+        // Smoothly transition to target velocity (based on direction persistence)
+        const persistence = personality.directionPersistence;
+        creature.vx = creature.vx * persistence + targetVx * (1 - persistence);
+        creature.vy = creature.vy * persistence + targetVy * (1 - persistence);
+        
+        // Add micro-jitter for liveliness
+        creature.vx += (Math.random() - 0.5) * personality.jitteriness * 0.05;
+        creature.vy += (Math.random() - 0.5) * personality.jitteriness * 0.05;
+        
+        // Limit speed to prevent runaway acceleration
+        this.limitSpeed(creature, speed * 1.2);
     }
     
     chaseBehavior(creature, speed) {
@@ -86,14 +121,16 @@ export class Simulation {
         const distance = Math.sqrt(dx * dx + dy * dy);
         
         if (distance > 0) {
-            // Normalize and apply speed
-            creature.vx = (dx / distance) * speed * 0.5;
-            creature.vy = (dy / distance) * speed * 0.5;
+            // Normalize and apply speed with personality variation
+            const speedMod = creature.personality?.speedVariation || 1.0;
+            creature.vx = (dx / distance) * speed * 0.5 * speedMod;
+            creature.vy = (dy / distance) * speed * 0.5 * speedMod;
         }
         
-        // Add slight wander for natural movement
-        creature.vx += (Math.random() - 0.5) * 0.2;
-        creature.vy += (Math.random() - 0.5) * 0.2;
+        // Add personality-based jitter for natural movement
+        const jitter = creature.personality?.jitteriness || 0.5;
+        creature.vx += (Math.random() - 0.5) * jitter * 0.3;
+        creature.vy += (Math.random() - 0.5) * jitter * 0.3;
     }
     
     fleeBehavior(creature, speed) {
@@ -104,8 +141,14 @@ export class Simulation {
         
         // Only flee if mouse is close
         if (distance < 150 && distance > 0) {
-            creature.vx = (dx / distance) * speed;
-            creature.vy = (dy / distance) * speed;
+            const speedMod = creature.personality?.speedVariation || 1.0;
+            creature.vx = (dx / distance) * speed * speedMod;
+            creature.vy = (dy / distance) * speed * speedMod;
+            
+            // Add panic jitter when fleeing
+            const jitter = creature.personality?.jitteriness || 0.5;
+            creature.vx += (Math.random() - 0.5) * jitter * 0.5;
+            creature.vy += (Math.random() - 0.5) * jitter * 0.5;
         } else {
             // Wander when mouse is far
             this.wanderBehavior(creature, speed * 0.3);
@@ -123,9 +166,17 @@ export class Simulation {
             const orbitalX = -dy / distance;
             const orbitalY = dx / distance;
             
+            // Apply personality variation to orbital speed and stability
+            const speedMod = creature.personality?.speedVariation || 1.0;
+            const jitter = creature.personality?.jitteriness || 0.5;
+            
             // Combine orbital motion with slight inward pull
-            creature.vx = orbitalX * speed + (this.mouseX - creature.x) * 0.001;
-            creature.vy = orbitalY * speed + (this.mouseY - creature.y) * 0.001;
+            creature.vx = orbitalX * speed * speedMod + (this.mouseX - creature.x) * 0.001;
+            creature.vy = orbitalY * speed * speedMod + (this.mouseY - creature.y) * 0.001;
+            
+            // Add orbital wobble based on jitteriness
+            creature.vx += (Math.random() - 0.5) * jitter * 0.2;
+            creature.vy += (Math.random() - 0.5) * jitter * 0.2;
         }
     }
     
@@ -156,8 +207,14 @@ export class Simulation {
             const distance = Math.sqrt(dx * dx + dy * dy);
             
             if (distance > 0) {
-                creature.vx = (dx / distance) * speed;
-                creature.vy = (dy / distance) * speed;
+                const speedMod = creature.personality?.speedVariation || 1.0;
+                creature.vx = (dx / distance) * speed * speedMod;
+                creature.vy = (dy / distance) * speed * speedMod;
+                
+                // Add seeking excitement jitter
+                const jitter = creature.personality?.jitteriness || 0.5;
+                creature.vx += (Math.random() - 0.5) * jitter * 0.3;
+                creature.vy += (Math.random() - 0.5) * jitter * 0.3;
             }
         }
     }
