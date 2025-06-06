@@ -4,6 +4,36 @@
 
 ## 📅 Current Session - June 6, 2025
 
+### 🌙 **DEMO CHANGE: Magic Pond Ecosystem**
+**Date**: Current session
+**Choice**: User selected "Magic Pond" demo over Cat & Mouse or Ecosystem options
+
+**New Default State**:
+- **Fish (🐟)**: 4 fish swimming gently in center pond with wander behavior
+- **Frogs (🐸)**: 3 frogs positioned around pond edges with seek-targets behavior
+- **Fireflies (✨)**: 5 fireflies that orbit around mouse cursor for magical effect
+
+**Interactions**:
+- **Mouse Movement**: Fireflies follow and orbit around cursor creating light trails
+- **Click to Place**: Lily pads/targets that frogs hop toward
+- **Peaceful Center**: Fish swim in flowing patterns in the pond center
+- **Serene Vibe**: Zen-like, magical atmosphere perfect for voice commands
+
+**Updated Instructions**:
+- "Move mouse to guide fireflies ✨"
+- "Click pond for frogs to hop there 🐸" 
+- "Fish swim peacefully in center 🐟"
+
+**Benefits**:
+- **Immediately Magical**: Shows off the enchanting potential
+- **Multiple Interaction Types**: Orbital, seeking, and wandering behaviors
+- **Perfect for Voice**: "Add more fireflies" or "make the fish dance"
+- **Calming**: Creates a peaceful environment for creativity
+
+**Next**: Test the magic pond ecosystem and feel the zen vibes!
+
+---
+
 ### 🎨 **MOVEMENT TUNING: Smoother Wandering**
 **Date**: Current session  
 **Issue**: Wandering creatures had too much jitter relative to forward movement

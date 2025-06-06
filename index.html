@@ -129,12 +129,13 @@
     <div class="app-container">
         <!-- Left Panel: Controls -->
         <div class="controls-panel">
-            <h1 class="app-title">🎮 AI Game Lab</h1>
+            <h1 class="app-title">🌙 Magic Pond</h1>
             
             <div class="instructions">
-                <p>🖱️ <strong>Move mouse</strong> over canvas to interact</p>
-                <p>🎯 <strong>Click canvas</strong> to place targets</p>
-                <p>🎮 <strong>Use buttons</strong> to spawn & control</p>
+                <p>🖱️ <strong>Move mouse</strong> to guide fireflies ✨</p>
+                <p>🎯 <strong>Click pond</strong> for frogs to hop there 🐸</p>
+                <p>🐟 <strong>Fish swim</strong> peacefully in center</p>
+                <p>🎮 <strong>Use buttons</strong> to add more magic</p>
             </div>
             
             <div class="voice-controls">
@@ -197,13 +198,30 @@
     
     <!-- Game World: The Live State -->
     <game-world style="display: none;">
-        <!-- Initial hardcoded simulation: a swarm of cats -->
-        <swarm emoji="🐱" count="5" behavior="wander" speed="2">
+        <!-- Magic Pond Demo: Serene, magical ecosystem on load -->
+        
+        <!-- Fish swimming in gentle patterns in the center pond -->
+        <swarm emoji="🐟" count="4" behavior="wander" speed="1.2">
+            <creature x="350" y="280" vx="0.5" vy="0.2"></creature>
+            <creature x="420" y="320" vx="-0.3" vy="0.4"></creature>
+            <creature x="380" y="350" vx="0.7" vy="-0.1"></creature>
+            <creature x="450" y="300" vx="-0.4" vy="-0.3"></creature>
+        </swarm>
+        
+        <!-- Frogs on the pond edges that hop toward clicked locations -->
+        <swarm emoji="🐸" count="3" behavior="seek-targets" speed="2.0">
+            <creature x="150" y="200" vx="0" vy="0"></creature>
+            <creature x="650" y="180" vx="0" vy="0"></creature>
+            <creature x="200" y="450" vx="0" vy="0"></creature>
+        </swarm>
+        
+        <!-- Fireflies that orbit around your mouse cursor -->
+        <swarm emoji="✨" count="5" behavior="orbit" speed="1.8">
             <creature x="100" y="100" vx="1" vy="0.5"></creature>
-            <creature x="150" y="120" vx="-0.8" vy="1.2"></creature>
-            <creature x="200" y="90" vx="0.3" vy="-1.0"></creature>
-            <creature x="120" y="150" vx="1.5" vy="0.2"></creature>
-            <creature x="180" y="140" vx="-1.2" vy="-0.7"></creature>
+            <creature x="700" y="120" vx="-0.8" vy="0.7"></creature>
+            <creature x="300" y="500" vx="0.6" vy="-0.4"></creature>
+            <creature x="500" y="80" vx="-0.5" vy="0.9"></creature>
+            <creature x="600" y="520" vx="0.9" vy="-0.6"></creature>
         </swarm>
     </game-world>
 
