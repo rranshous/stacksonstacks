@@ -4,6 +4,37 @@
 
 ## 📅 Current Session - June 6, 2025
 
+### 🎨 **BEHAVIOR TUNING: Magic Pond Improvements**
+**Date**: Current session
+**Issues**: Fish too clustered, fireflies too far/fast, need to understand swarm behavior
+
+**Swarm Behavior Explanation**:
+- **Each `<swarm>` = One Unified Behavior**: All creatures in a swarm share the same behavior
+- **Individual Personalities**: Within the behavior, each creature has unique personality traits
+- **Example**: All frogs use `seek-targets`, but each has different jitteriness/speed
+- **DOM Structure**: `<swarm behavior="seek-targets">` → all creatures seek clicked locations
+
+**Fish Wandering Improvements**:
+- **More Direction Changes**: 40-120 frames instead of 60-180 for more exploration
+- **Bigger Turns**: 2.5x jitteriness factor instead of 1.5x for wider paths  
+- **Less Persistence**: 75% minimum instead of 85% to allow more wandering
+- **More Continuous Adjustment**: 0.05 instead of 0.02 for better spread
+
+**Firefly Orbit Improvements**:
+- **Slower Speed**: Reduced from 1.8 to 1.2 in HTML
+- **Closer Orbits**: 60% orbital speed instead of 100% 
+- **Stronger Inward Pull**: Distance-based pull (0.008 when far, 0.003 when close)
+- **Gentler Wobble**: Reduced jitter from 0.2 to 0.1 for smoother magic
+
+**Result**: 
+- Fish now spread out more and explore the pond area
+- Fireflies stay closer and orbit more gently around mouse
+- Frogs still hop toward clicked targets (shared seek-targets behavior)
+
+**Next**: Test the improved Magic Pond ecosystem!
+
+---
+
 ### 🌙 **DEMO CHANGE: Magic Pond Ecosystem**
 **Date**: Current session
 **Choice**: User selected "Magic Pond" demo over Cat & Mouse or Ecosystem options

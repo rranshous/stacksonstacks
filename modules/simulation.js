@@ -87,22 +87,22 @@ export class Simulation {
         // Update wander timer
         personality.wanderTimer += 1;
         
-        // Occasionally make bigger direction changes (creates more interesting paths)
-        if (personality.wanderTimer > (60 + Math.random() * 120)) {
-            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 1.5;
+        // More frequent direction changes for fish to spread out more
+        if (personality.wanderTimer > (40 + Math.random() * 80)) {
+            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 2.5;
             personality.wanderTimer = 0;
         }
         
-        // Very small continuous adjustments for gentle curves (much reduced)
-        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.02;
+        // Slightly more continuous adjustments to encourage exploration
+        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.05;
         
         // Calculate target velocity from wander angle
         const targetSpeed = speed * personality.speedVariation;
         const targetVx = Math.cos(personality.wanderAngle) * targetSpeed;
         const targetVy = Math.sin(personality.wanderAngle) * targetSpeed;
         
-        // Much stronger direction persistence for smoother movement
-        const persistence = Math.max(0.85, personality.directionPersistence);
+        // Slightly less persistence to allow more wandering
+        const persistence = Math.max(0.75, personality.directionPersistence);
         creature.vx = creature.vx * persistence + targetVx * (1 - persistence);
         creature.vy = creature.vy * persistence + targetVy * (1 - persistence);
         
@@ -172,13 +172,16 @@ export class Simulation {
             const speedMod = creature.personality?.speedVariation || 1.0;
             const jitter = creature.personality?.jitteriness || 0.5;
             
-            // Combine orbital motion with slight inward pull
-            creature.vx = orbitalX * speed * speedMod + (this.mouseX - creature.x) * 0.001;
-            creature.vy = orbitalY * speed * speedMod + (this.mouseY - creature.y) * 0.001;
+            // Stronger inward pull to keep fireflies closer to mouse
+            const pullStrength = distance > 100 ? 0.008 : 0.003; // Pull harder when far
             
-            // Add orbital wobble based on jitteriness
-            creature.vx += (Math.random() - 0.5) * jitter * 0.2;
-            creature.vy += (Math.random() - 0.5) * jitter * 0.2;
+            // Combine orbital motion with inward pull
+            creature.vx = orbitalX * speed * 0.6 * speedMod + (this.mouseX - creature.x) * pullStrength;
+            creature.vy = orbitalY * speed * 0.6 * speedMod + (this.mouseY - creature.y) * pullStrength;
+            
+            // Gentle orbital wobble for magical effect
+            creature.vx += (Math.random() - 0.5) * jitter * 0.1;
+            creature.vy += (Math.random() - 0.5) * jitter * 0.1;
         }
     }
     
