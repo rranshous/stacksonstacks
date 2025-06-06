@@ -2,10 +2,152 @@
  * Game Engine - Separated Concerns Architecture
  * 
  * 1. Simulation: Pure game logic (positions, velocities, behaviors)
- * 2. DOMSync: Persistence layer (reads/writes DOM state)
+ * 2. DOMSync: Persistence layer (reads/writes DOM state) 
  * 3. Renderer: Canvas visualization
  */
 
+// Separated Concerns Classes
+
+/**
+ * DOMSync - Handles reading/writing game state to/from DOM
+ * Pure data persistence layer
+ */
+class DOMSync {
+    constructor(gameWorld) {
+        this.gameWorld = gameWorld;
+    }
+    
+    loadGameState() {
+        const gameState = {
+            swarms: []
+        };
+        
+        const swarms = this.gameWorld.querySelectorAll('swarm');
+        swarms.forEach(swarmEl => {
+            const swarm = {
+                element: swarmEl,
+                emoji: swarmEl.getAttribute('emoji') || '🐱',
+                behavior: swarmEl.getAttribute('behavior') || 'wander',
+                speed: parseFloat(swarmEl.getAttribute('speed')) || 1,
+                creatures: []
+            };
+            
+            const creatures = swarmEl.querySelectorAll('creature');
+            creatures.forEach(creatureEl => {
+                swarm.creatures.push({
+                    element: creatureEl,
+                    x: parseFloat(creatureEl.getAttribute('x')) || 0,
+                    y: parseFloat(creatureEl.getAttribute('y')) || 0,
+                    vx: parseFloat(creatureEl.getAttribute('vx')) || 0,
+                    vy: parseFloat(creatureEl.getAttribute('vy')) || 0
+                });
+            });
+            
+            gameState.swarms.push(swarm);
+        });
+        
+        return gameState;
+    }
+    
+    saveGameState(gameState) {
+        gameState.swarms.forEach(swarm => {
+            swarm.creatures.forEach(creature => {
+                creature.element.setAttribute('x', creature.x.toFixed(2));
+                creature.element.setAttribute('y', creature.y.toFixed(2));
+                creature.element.setAttribute('vx', creature.vx.toFixed(2));
+                creature.element.setAttribute('vy', creature.vy.toFixed(2));
+            });
+        });
+    }
+}
+
+/**
+ * Simulation - Pure game logic, no DOM dependencies
+ * Takes game state, returns updated game state
+ */
+class Simulation {
+    constructor(bounds) {
+        this.bounds = bounds;
+    }
+    
+    update(gameState, deltaTime) {
+        // Process each swarm
+        gameState.swarms.forEach(swarm => {
+            swarm.creatures.forEach(creature => {
+                this.updateCreature(creature, swarm.behavior, swarm.speed, deltaTime);
+            });
+        });
+        
+        return gameState;
+    }
+    
+    updateCreature(creature, behavior, speed, deltaTime) {
+        // Apply behavior (pure logic, no DOM)
+        switch (behavior) {
+            case 'wander':
+                // Add some randomness to velocity
+                creature.vx += (Math.random() - 0.5) * 0.1;
+                creature.vy += (Math.random() - 0.5) * 0.1;
+                
+                // Limit velocity
+                const currentSpeed = Math.sqrt(creature.vx * creature.vx + creature.vy * creature.vy);
+                if (currentSpeed > speed) {
+                    creature.vx = (creature.vx / currentSpeed) * speed;
+                    creature.vy = (creature.vy / currentSpeed) * speed;
+                }
+                break;
+                
+            case 'chase':
+                // TODO: Chase behavior (toward mouse or other target)
+                break;
+                
+            case 'flee':
+                // TODO: Flee behavior (away from mouse or threat)
+                break;
+        }
+        
+        // Update position
+        creature.x += creature.vx;
+        creature.y += creature.vy;
+        
+        // Wrap around screen boundaries
+        if (creature.x < 0) creature.x = this.bounds.width;
+        if (creature.x > this.bounds.width) creature.x = 0;
+        if (creature.y < 0) creature.y = this.bounds.height;
+        if (creature.y > this.bounds.height) creature.y = 0;
+    }
+}
+
+/**
+ * Renderer - Pure canvas drawing, takes game state and renders it
+ */
+class Renderer {
+    constructor(ctx) {
+        this.ctx = ctx;
+    }
+    
+    render(gameState) {
+        // Clear canvas
+        this.ctx.fillStyle = '#111';
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        
+        // Set font for emoji rendering
+        this.ctx.font = '24px sans-serif';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        
+        // Render all swarms
+        gameState.swarms.forEach(swarm => {
+            swarm.creatures.forEach(creature => {
+                this.ctx.fillText(swarm.emoji, creature.x, creature.y);
+            });
+        });
+    }
+}
+
+/**
+ * Game Engine - Orchestrates the separated concerns
+ */
 class GameEngine {
     constructor() {
         this.canvas = document.getElementById('game-canvas');
@@ -64,101 +206,6 @@ class GameEngine {
         this.updateDebugInfo();
         
         requestAnimationFrame((time) => this.gameLoop(time));
-    }
-    
-    updatePhysics(deltaTime) {
-        // Find all swarms and update their creatures
-        const swarms = this.gameWorld.querySelectorAll('swarm');
-        
-        swarms.forEach(swarm => {
-            const behavior = swarm.getAttribute('behavior') || 'wander';
-            const speed = parseFloat(swarm.getAttribute('speed')) || 1;
-            const creatures = swarm.querySelectorAll('creature');
-            
-            creatures.forEach(creature => {
-                this.updateCreature(creature, behavior, speed, deltaTime);
-            });
-        });
-    }
-    
-    updateCreature(creature, behavior, speed, deltaTime) {
-        // Get current state from DOM
-        let x = parseFloat(creature.getAttribute('x')) || 0;
-        let y = parseFloat(creature.getAttribute('y')) || 0;
-        let vx = parseFloat(creature.getAttribute('vx')) || 0;
-        let vy = parseFloat(creature.getAttribute('vy')) || 0;
-        
-        // Apply behavior
-        switch (behavior) {
-            case 'wander':
-                // Add some randomness to velocity
-                vx += (Math.random() - 0.5) * 0.1;
-                vy += (Math.random() - 0.5) * 0.1;
-                
-                // Limit velocity
-                const maxSpeed = speed;
-                const currentSpeed = Math.sqrt(vx * vx + vy * vy);
-                if (currentSpeed > maxSpeed) {
-                    vx = (vx / currentSpeed) * maxSpeed;
-                    vy = (vy / currentSpeed) * maxSpeed;
-                }
-                break;
-                
-            case 'chase':
-                // TODO: Chase behavior (toward mouse or other target)
-                break;
-                
-            case 'flee':
-                // TODO: Flee behavior (away from mouse or threat)
-                break;
-        }
-        
-        // Update position
-        x += vx;
-        y += vy;
-        
-        // Wrap around screen boundaries
-        if (x < 0) x = this.bounds.width;
-        if (x > this.bounds.width) x = 0;
-        if (y < 0) y = this.bounds.height;
-        if (y > this.bounds.height) y = 0;
-        
-        // Write back to DOM (this is our state persistence!)
-        creature.setAttribute('x', x.toFixed(2));
-        creature.setAttribute('y', y.toFixed(2));
-        creature.setAttribute('vx', vx.toFixed(2));
-        creature.setAttribute('vy', vy.toFixed(2));
-    }
-    
-    render() {
-        // Clear canvas
-        this.ctx.fillStyle = '#111';
-        this.ctx.fillRect(0, 0, this.bounds.width, this.bounds.height);
-        
-        // Render all swarms
-        const swarms = this.gameWorld.querySelectorAll('swarm');
-        
-        swarms.forEach(swarm => {
-            this.renderSwarm(swarm);
-        });
-    }
-    
-    renderSwarm(swarm) {
-        const emoji = swarm.getAttribute('emoji') || '🐱';
-        const creatures = swarm.querySelectorAll('creature');
-        
-        // Set font for emoji rendering
-        this.ctx.font = '24px sans-serif';
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        
-        creatures.forEach(creature => {
-            const x = parseFloat(creature.getAttribute('x'));
-            const y = parseFloat(creature.getAttribute('y'));
-            
-            // Render emoji at creature position
-            this.ctx.fillText(emoji, x, y);
-        });
     }
     
     updateDebugInfo() {

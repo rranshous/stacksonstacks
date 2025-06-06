@@ -111,4 +111,33 @@
 
 ---
 
+### 🏗️ **MAJOR REFACTOR: Separated Concerns Architecture**
+**Date**: Current session
+**Reason**: Original game engine was mixing simulation logic with DOM persistence
+
+**New Architecture**:
+1. **`DOMSync`** - Pure persistence layer (reads/writes DOM state)
+2. **`Simulation`** - Pure game logic (no DOM dependencies)  
+3. **`Renderer`** - Pure canvas drawing (takes game state, renders it)
+4. **`GameEngine`** - Orchestrates the three concerns
+
+**Benefits**:
+- **Testable**: Each class has single responsibility
+- **Extensible**: Can swap out rendering or persistence layers
+- **Debuggable**: Clear data flow through the system
+- **AI-Ready**: Clean interfaces for AI to understand and modify
+
+**Data Flow**:
+```
+DOM → DOMSync.loadGameState() → Simulation.update() → DOMSync.saveGameState() → DOM
+                                       ↓
+                              Renderer.render() → Canvas
+```
+
+**Files**: 
+- `game-engine-v2.js` - New separated concerns implementation
+- `game-engine.js` - Original (kept for reference)
+
+---
+
 *Update this log as we make progress and decisions. Keep it concise but complete enough for context switching.*
