@@ -7,20 +7,47 @@
     <style>
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             background: #0a0a0a;
             color: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .controls-panel {
+            width: 350px;
+            padding: 20px;
+            background: #0f0f0f;
+            border-right: 2px solid #333;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .canvas-panel {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
         #game-canvas {
             border: 2px solid #333;
             background: #111;
             border-radius: 8px;
+            margin-bottom: 20px;
         }
         
         #debug-panel {
-            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
             padding: 15px;
             background: #1a1a1a;
             border-radius: 8px;
@@ -29,11 +56,11 @@
         }
         
         .voice-controls {
-            margin: 20px 0;
+            margin: 0 0 20px 0;
         }
         
         .instructions {
-            margin: 15px 0;
+            margin: 0 0 20px 0;
             padding: 12px;
             background: #0f3460;
             border-radius: 6px;
@@ -46,107 +73,127 @@
         }
         
         .game-controls {
-            margin: 20px 0;
-            padding: 15px;
-            background: #1a1a1a;
-            border-radius: 8px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
         }
         
         .game-controls h3 {
             margin: 0 0 15px 0;
             color: #60a5fa;
+            font-size: 18px;
         }
         
         .control-section {
             margin-bottom: 15px;
-            padding: 10px;
-            background: #2a2a2a;
+            padding: 12px;
+            background: #1a1a1a;
             border-radius: 6px;
         }
         
         .control-section h4 {
-            margin: 0 0 8px 0;
+            margin: 0 0 10px 0;
             color: #fbbf24;
             font-size: 14px;
         }
         
         .control-section button {
-            margin: 2px;
+            margin: 3px;
             padding: 8px 12px;
-            font-size: 12px;
+            font-size: 11px;
+            display: inline-block;
         }
         
         button {
-            padding: 10px 20px;
-            margin: 5px;
+            padding: 8px 16px;
+            margin: 2px;
             background: #2563eb;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 12px;
         }
         
         button:hover {
             background: #1d4ed8;
         }
+        
+        .app-title {
+            margin: 0 0 20px 0;
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
-    <h1>🎮 AI Game Creation Lab</h1>
-    
-    <div class="instructions">
-        <p>🖱️ <strong>Move mouse</strong> over canvas to interact with creatures</p>
-        <p>🎯 <strong>Click canvas</strong> to place targets for creatures to seek</p>
-        <p>🎮 <strong>Use buttons</strong> to spawn creatures and change behaviors</p>
+    <div class="app-container">
+        <!-- Left Panel: Controls -->
+        <div class="controls-panel">
+            <h1 class="app-title">🎮 AI Game Lab</h1>
+            
+            <div class="instructions">
+                <p>🖱️ <strong>Move mouse</strong> over canvas to interact</p>
+                <p>🎯 <strong>Click canvas</strong> to place targets</p>
+                <p>🎮 <strong>Use buttons</strong> to spawn & control</p>
+            </div>
+            
+            <div class="voice-controls">
+                <button id="voice-btn">🎤 Speak Command</button>
+                <button id="test-ai-btn">🧠 Test AI</button>
+            </div>
+            
+            <div class="game-controls">
+                <h3>🎮 Game Controls</h3>
+                
+                <div class="control-section">
+                    <h4>➕ Add Creatures</h4>
+                    <button id="add-cat-btn">🐱 Add Cat</button>
+                    <button id="add-butterfly-btn">🦋 Add Butterfly</button>
+                    <button id="cat-swarm-btn">🐱x10 Cat Swarm</button>
+                    <button id="fish-school-btn">🐟 Fish School</button>
+                    <button id="bug-party-btn">🐛 Bug Party</button>
+                </div>
+                
+                <div class="control-section">
+                    <h4>🖱️ Mouse Interactions</h4>
+                    <button id="chase-mouse-btn">🐕 Chase Mouse</button>
+                    <button id="flee-mouse-btn">🐰 Flee Mouse</button>
+                    <button id="orbit-mouse-btn">⭐ Orbit Mouse</button>
+                    <button id="seek-targets-btn">🔥 Seek Clicks</button>
+                </div>
+                
+                <div class="control-section">
+                    <h4>🎭 Change Behaviors</h4>
+                    <button id="make-chasers-btn">🎯 All Chase</button>
+                    <button id="make-wanderers-btn">🚶 All Wander</button>
+                    <button id="make-orbiters-btn">🌀 All Orbit</button>
+                </div>
+                
+                <div class="control-section">
+                    <h4>⚡ Speed Control</h4>
+                    <button id="slow-down-btn">🐌 Slow</button>
+                    <button id="normal-speed-btn">🏃 Normal</button>
+                    <button id="speed-up-btn">⚡ Fast</button>
+                </div>
+                
+                <div class="control-section">
+                    <h4>🧹 Clear World</h4>
+                    <button id="clear-world-btn">🧹 Clear Creatures</button>
+                    <button id="clear-swarms-btn">💨 Clear All</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel: Canvas & Debug -->
+        <div class="canvas-panel">
+            <canvas id="game-canvas" width="800" height="600"></canvas>
+            
+            <div id="debug-panel">
+                <strong>DOM State:</strong>
+                <div id="dom-output"></div>
+            </div>
+        </div>
     </div>
-    
-    <div class="voice-controls">
-        <button id="voice-btn">🎤 Speak Command</button>
-        <button id="test-ai-btn">🧠 Test AI Interaction</button>
-    </div>
-    
-    <div class="game-controls">
-        <h3>🎮 Game Controls</h3>
-        
-        <div class="control-section">
-            <h4>➕ Add Creatures</h4>
-            <button id="add-cat-btn">🐱 Add Cat</button>
-            <button id="add-butterfly-btn">🦋 Add Butterfly</button>
-            <button id="cat-swarm-btn">🐱x10 Cat Swarm</button>
-            <button id="fish-school-btn">🐟 Fish School</button>
-            <button id="bug-party-btn">🐛 Bug Party</button>
-        </div>
-        
-        <div class="control-section">
-            <h4>🖱️ Mouse Interactions</h4>
-            <button id="chase-mouse-btn">🐕 Chase Mouse</button>
-            <button id="flee-mouse-btn">🐰 Flee Mouse</button>
-            <button id="orbit-mouse-btn">⭐ Orbit Mouse</button>
-            <button id="seek-targets-btn">🔥 Seek Clicks</button>
-        </div>
-        
-        <div class="control-section">
-            <h4>🎭 Change Behaviors</h4>
-            <button id="make-chasers-btn">🎯 All Chase</button>
-            <button id="make-wanderers-btn">🚶 All Wander</button>
-            <button id="make-orbiters-btn">🌀 All Orbit</button>
-        </div>
-        
-        <div class="control-section">
-            <h4>⚡ Speed Control</h4>
-            <button id="slow-down-btn">🐌 Slow</button>
-            <button id="normal-speed-btn">🏃 Normal</button>
-            <button id="speed-up-btn">⚡ Fast</button>
-        </div>
-        
-        <div class="control-section">
-            <h4>🧹 Clear World</h4>
-            <button id="clear-world-btn">🧹 Clear Creatures</button>
-            <button id="clear-swarms-btn">💨 Clear All</button>
-        </div>
-    </div>
-    
-    <canvas id="game-canvas" width="800" height="600"></canvas>
     
     <!-- Game World: The Live State -->
     <game-world style="display: none;">
@@ -159,11 +206,6 @@
             <creature x="180" y="140" vx="-1.2" vy="-0.7"></creature>
         </swarm>
     </game-world>
-    
-    <div id="debug-panel">
-        <strong>DOM State:</strong>
-        <div id="dom-output"></div>
-    </div>
 
     <script type="module">
         import { GameEngine } from './game-engine-v3.js';
