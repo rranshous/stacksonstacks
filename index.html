@@ -32,6 +32,19 @@
             margin: 20px 0;
         }
         
+        .instructions {
+            margin: 15px 0;
+            padding: 12px;
+            background: #0f3460;
+            border-radius: 6px;
+            border-left: 4px solid #60a5fa;
+        }
+        
+        .instructions p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
         .game-controls {
             margin: 20px 0;
             padding: 15px;
@@ -40,8 +53,27 @@
         }
         
         .game-controls h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             color: #60a5fa;
+        }
+        
+        .control-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #2a2a2a;
+            border-radius: 6px;
+        }
+        
+        .control-section h4 {
+            margin: 0 0 8px 0;
+            color: #fbbf24;
+            font-size: 14px;
+        }
+        
+        .control-section button {
+            margin: 2px;
+            padding: 8px 12px;
+            font-size: 12px;
         }
         
         button {
@@ -62,6 +94,12 @@
 <body>
     <h1>🎮 AI Game Creation Lab</h1>
     
+    <div class="instructions">
+        <p>🖱️ <strong>Move mouse</strong> over canvas to interact with creatures</p>
+        <p>🎯 <strong>Click canvas</strong> to place targets for creatures to seek</p>
+        <p>🎮 <strong>Use buttons</strong> to spawn creatures and change behaviors</p>
+    </div>
+    
     <div class="voice-controls">
         <button id="voice-btn">🎤 Speak Command</button>
         <button id="test-ai-btn">🧠 Test AI Interaction</button>
@@ -69,12 +107,43 @@
     
     <div class="game-controls">
         <h3>🎮 Game Controls</h3>
-        <button id="add-cat-btn">🐱 Add Cat</button>
-        <button id="add-butterfly-btn">🦋 Add Butterfly</button>
-        <button id="speed-up-btn">⚡ Speed Up</button>
-        <button id="slow-down-btn">🐌 Slow Down</button>
-        <button id="clear-world-btn">🧹 Clear World</button>
-        <button id="cat-swarm-btn">🐱x10 Cat Swarm</button>
+        
+        <div class="control-section">
+            <h4>➕ Add Creatures</h4>
+            <button id="add-cat-btn">🐱 Add Cat</button>
+            <button id="add-butterfly-btn">🦋 Add Butterfly</button>
+            <button id="cat-swarm-btn">🐱x10 Cat Swarm</button>
+            <button id="fish-school-btn">🐟 Fish School</button>
+            <button id="bug-party-btn">🐛 Bug Party</button>
+        </div>
+        
+        <div class="control-section">
+            <h4>🖱️ Mouse Interactions</h4>
+            <button id="chase-mouse-btn">🐕 Chase Mouse</button>
+            <button id="flee-mouse-btn">🐰 Flee Mouse</button>
+            <button id="orbit-mouse-btn">⭐ Orbit Mouse</button>
+            <button id="seek-targets-btn">🔥 Seek Clicks</button>
+        </div>
+        
+        <div class="control-section">
+            <h4>🎭 Change Behaviors</h4>
+            <button id="make-chasers-btn">🎯 All Chase</button>
+            <button id="make-wanderers-btn">🚶 All Wander</button>
+            <button id="make-orbiters-btn">🌀 All Orbit</button>
+        </div>
+        
+        <div class="control-section">
+            <h4>⚡ Speed Control</h4>
+            <button id="slow-down-btn">🐌 Slow</button>
+            <button id="normal-speed-btn">🏃 Normal</button>
+            <button id="speed-up-btn">⚡ Fast</button>
+        </div>
+        
+        <div class="control-section">
+            <h4>🧹 Clear World</h4>
+            <button id="clear-world-btn">🧹 Clear Creatures</button>
+            <button id="clear-swarms-btn">💨 Clear All</button>
+        </div>
     </div>
     
     <canvas id="game-canvas" width="800" height="600"></canvas>
@@ -96,6 +165,19 @@
         <div id="dom-output"></div>
     </div>
 
-    <script src="game-engine-v2.js"></script>
+    <script type="module">
+        import { GameEngine } from './game-engine-v3.js';
+        import { setupGameControls } from './modules/game-controls.js';
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.gameEngine = new GameEngine();
+            setupGameControls(window.gameEngine);
+            
+            console.log('🚀 Modular game engine initialized!');
+            console.log('💡 Try moving your mouse over the canvas!');
+            console.log('🎯 Click on the canvas to place targets!');
+        });
+    </script>
 </body>
 </html>

@@ -4,6 +4,46 @@
 
 ## 📅 Current Session - June 6, 2025
 
+### 🏗️ **MAJOR REFACTOR: Modular Architecture V3**
+**Date**: Current session
+**Reason**: Breaking up the monolithic game engine into separate modules for better organization and review
+
+**New Modular Structure**:
+1. **`modules/dom-sync.js`** - Pure DOM persistence layer
+2. **`modules/simulation.js`** - Pure game logic with enhanced behaviors  
+3. **`modules/renderer.js`** - Canvas rendering with mouse tracking visuals
+4. **`modules/dom-tools.js`** - DOM manipulation utilities
+5. **`modules/game-controls.js`** - Button event handlers
+6. **`game-engine-v3.js`** - Main orchestrator that imports all modules
+
+**New Features Added**:
+- **Mouse Tracking**: Creatures can see and react to mouse position
+- **Mouse Targets**: Click canvas to place targets that fade over time
+- **New Behaviors**: chase, flee, orbit, seek-targets
+- **Enhanced Controls**: 20+ buttons organized into logical sections
+- **Visual Feedback**: Mouse cursor indicator and target rings on canvas
+
+**Mouse Interactions**:
+- **Chase**: Dogs follow mouse around
+- **Flee**: Rabbits run away when mouse gets close  
+- **Orbit**: Stars circle around mouse position
+- **Seek Targets**: Fires move toward clicked locations
+
+**Benefits**:
+- **Easier Review**: Each module is focused and self-contained
+- **Better Testing**: Pure functions with clear inputs/outputs
+- **Extensible**: Easy to add new behaviors or rendering effects
+- **Organized**: Button controls separated from core engine logic
+
+**Files**:
+- All modules in `/modules/` directory
+- `game-engine-v3.js` - New main engine
+- Updated `index.html` to use ES6 modules
+
+**Next Step**: Test the new modular system and mouse interactions.
+
+---
+
 ### 🧹 **CLEANUP: Removed Unused Element Definitions**
 **Date**: Current session  
 **Action**: Removed the entire `<element-definitions>` section from `index.html`
