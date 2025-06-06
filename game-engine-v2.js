@@ -301,4 +301,86 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🎤 Voice recognition not implemented yet');
         alert('Voice recognition coming soon! Use "Test AI" button for now.');
     });
+    
+    // Game control buttons
+    document.getElementById('add-cat-btn').addEventListener('click', () => {
+        const swarm = document.querySelector('swarm');
+        if (swarm) {
+            const randomX = Math.random() * 800;
+            const randomY = Math.random() * 600;
+            const randomVx = (Math.random() - 0.5) * 2;
+            const randomVy = (Math.random() - 0.5) * 2;
+            
+            window.gameEngine.createElement(swarm, 'creature', {
+                x: randomX,
+                y: randomY,
+                vx: randomVx,
+                vy: randomVy
+            });
+            console.log('🐱 Added new cat!');
+        }
+    });
+    
+    document.getElementById('add-butterfly-btn').addEventListener('click', () => {
+        const gameWorld = document.querySelector('game-world');
+        if (gameWorld) {
+            // Create a new butterfly swarm
+            const butterflySwarm = window.gameEngine.createElement(gameWorld, 'swarm', {
+                emoji: '🦋',
+                count: '1',
+                behavior: 'wander',
+                speed: '1.5'
+            });
+            
+            // Add butterfly creature
+            const randomX = Math.random() * 800;
+            const randomY = Math.random() * 600;
+            const randomVx = (Math.random() - 0.5) * 1.5;
+            const randomVy = (Math.random() - 0.5) * 1.5;
+            
+            window.gameEngine.createElement(butterflySwarm, 'creature', {
+                x: randomX,
+                y: randomY,
+                vx: randomVx,
+                vy: randomVy
+            });
+            console.log('🦋 Added new butterfly!');
+        }
+    });
+    
+    document.getElementById('speed-up-btn').addEventListener('click', () => {
+        window.gameEngine.modifyElement('swarm', 'speed', '4');
+        console.log('⚡ Sped up all creatures!');
+    });
+    
+    document.getElementById('slow-down-btn').addEventListener('click', () => {
+        window.gameEngine.modifyElement('swarm', 'speed', '0.5');
+        console.log('🐌 Slowed down all creatures!');
+    });
+    
+    document.getElementById('clear-world-btn').addEventListener('click', () => {
+        window.gameEngine.removeElement('creature');
+        console.log('🧹 Cleared all creatures!');
+    });
+    
+    document.getElementById('cat-swarm-btn').addEventListener('click', () => {
+        const swarm = document.querySelector('swarm');
+        if (swarm) {
+            // Add 10 cats at once
+            for (let i = 0; i < 10; i++) {
+                const randomX = Math.random() * 800;
+                const randomY = Math.random() * 600;
+                const randomVx = (Math.random() - 0.5) * 2;
+                const randomVy = (Math.random() - 0.5) * 2;
+                
+                window.gameEngine.createElement(swarm, 'creature', {
+                    x: randomX,
+                    y: randomY,
+                    vx: randomVx,
+                    vy: randomVy
+                });
+            }
+            console.log('🐱x10 Added cat swarm!');
+        }
+    });
 });

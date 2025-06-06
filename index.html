@@ -32,6 +32,18 @@
             margin: 20px 0;
         }
         
+        .game-controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+        
+        .game-controls h3 {
+            margin: 0 0 10px 0;
+            color: #60a5fa;
+        }
+        
         button {
             padding: 10px 20px;
             margin: 5px;
@@ -53,6 +65,16 @@
     <div class="voice-controls">
         <button id="voice-btn">🎤 Speak Command</button>
         <button id="test-ai-btn">🧠 Test AI Interaction</button>
+    </div>
+    
+    <div class="game-controls">
+        <h3>🎮 Game Controls</h3>
+        <button id="add-cat-btn">🐱 Add Cat</button>
+        <button id="add-butterfly-btn">🦋 Add Butterfly</button>
+        <button id="speed-up-btn">⚡ Speed Up</button>
+        <button id="slow-down-btn">🐌 Slow Down</button>
+        <button id="clear-world-btn">🧹 Clear World</button>
+        <button id="cat-swarm-btn">🐱x10 Cat Swarm</button>
     </div>
     
     <canvas id="game-canvas" width="800" height="600"></canvas>
