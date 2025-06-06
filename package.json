@@ -1,0 +1,17 @@
+{
+  "name": "ai-game-creation-collab",
+  "version": "1.0.0",
+  "description": "Voice-driven collaborative game creation with AI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "keywords": ["ai", "game", "collaboration", "voice", "dom"],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Game Creation Collab</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        
+        #game-canvas {
+            border: 2px solid #333;
+            background: #111;
+            border-radius: 8px;
+        }
+        
+        #debug-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+        }
+        
+        .voice-controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 AI Game Creation Lab</h1>
+    
+    <div class="voice-controls">
+        <button id="voice-btn">🎤 Speak Command</button>
+        <button id="test-ai-btn">🧠 Test AI Interaction</button>
+    </div>
+    
+    <canvas id="game-canvas" width="800" height="600"></canvas>
+    
+    <!-- Element Definitions: The Vocabulary -->
+    <element-definitions locked="true" style="display: none;">
+        <!-- Rich primitives that AI can work with -->
+        <swarm-definition emoji="🐱" behavior="playful,chasing,clustering"></swarm-definition>
+        <flock-definition emoji="🦋" behavior="flutter,avoid-crowding,spiral"></flock-definition>
+        <school-definition emoji="🐟" behavior="tight-formation,wave-motion"></school-definition>
+        <sparkle-trail-definition behavior="glittery-particles"></sparkle-trail-definition>
+    </element-definitions>
+    
+    <!-- Game World: The Live State -->
+    <game-world style="display: none;">
+        <!-- Initial hardcoded simulation: a swarm of cats -->
+        <swarm emoji="🐱" count="5" behavior="wander" speed="2">
+            <creature x="100" y="100" vx="1" vy="0.5"></creature>
+            <creature x="150" y="120" vx="-0.8" vy="1.2"></creature>
+            <creature x="200" y="90" vx="0.3" vy="-1.0"></creature>
+            <creature x="120" y="150" vx="1.5" vy="0.2"></creature>
+            <creature x="180" y="140" vx="-1.2" vy="-0.7"></creature>
+        </swarm>
+    </game-world>
+    
+    <div id="debug-panel">
+        <strong>DOM State:</strong>
+        <div id="dom-output"></div>
+    </div>
+
+    <script src="game-engine.js"></script>
+</body>
+</html>
