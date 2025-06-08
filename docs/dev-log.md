@@ -4,6 +4,59 @@
 
 ## 📅 Current Session - June 8, 2025
 
+### 🎯 **SNAPSHOT SYSTEM: Mixed Dynamic/Hardcoded Architecture**
+**Date**: Current session  
+**Feature**: Understanding snapshot implementation - captures dynamic content while supporting hardcoded templates
+
+**How Snapshots Work**:
+- **Dynamic Capture**: `createSnapshot()` finds live game elements (swarms, win-conditions, obstacles) and clones their current state
+- **Mixed Storage**: System handles both hardcoded templates (in HTML) and dynamically created snapshots seamlessly
+- **Restoration**: `restoreSnapshot()` removes current live elements and restores saved state from either source
+
+**What We Capture vs Hardcode**:
+- **CAPTURED DYNAMICALLY**: Live `<swarm>`, `<win-condition>`, `<obstacle>` elements with positions, velocities, behaviors
+- **HARDCODED**: "Magic Pond" and "🏠 Cat Goes Home" templates in HTML for demos/intro games
+- **UI Structure**: Control panels, canvas, and game-world container remain static
+
+**DOM-Everything Benefits**:
+- AI can read both hardcoded and dynamic snapshots using same structure
+- Perfect for voice-driven game creation - AI just needs to modify DOM elements
+- Snapshots become "save states" that preserve full game context
+- Children can say "make it like the cat game" and AI can reference existing snapshots
+
+**Code Organization**: 
+- Snapshot logic in `game-controls.js` with gallery UI integration
+- Both template and dynamic snapshots use identical `<snapshot name="">` structure
+- Game engine automatically detects and loads all snapshot types on startup
+
+**Result**: Robust snapshot system supporting both AI templates and user-generated content! 📸✨
+
+---
+
+### 🧹 **CLEANUP: Debug Panel Removal** 
+**Date**: Current session
+**Feature**: Removed debug panel and related functionality for cleaner user experience
+
+**Changes Made**:
+- **Game Engine V3**: Removed `updateDebugInfo()` method and debug output functionality
+- **Simplified Game Loop**: No more debug updates in main loop for better performance  
+- **Clean UI**: Debug panel CSS remains but panel is not rendered (future-proofing)
+- **Console Logging**: Kept informative console logs for development debugging
+
+**Rationale**:
+- **Child-Friendly**: Removes technical complexity from user interface
+- **Performance**: Eliminates DOM updates for debug info every frame
+- **Focus**: Users can focus on creative game-making rather than technical details
+- **Console Available**: Developers can still see detailed logs in browser console
+
+**Files Modified**:
+- `game-engine-v3.js` - Streamlined without debug panel updates
+- User experience now cleaner and more focused on creativity
+
+**Result**: Cleaner, more child-friendly interface while preserving development debugging capability! 🧹✨
+
+---
+
 ### 🎯 **WIN-CONDITION SYSTEM: Complete Implementation**
 **Date**: Current session
 **Feature**: Implemented complete win-condition system with DOM-based snapshots
