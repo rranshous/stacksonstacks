@@ -4,6 +4,30 @@
 
 ## 📅 Current Session - June 6, 2025
 
+## 📅 Current Session - June 6, 2025
+
+### 🐛 **BUG FIX: Clear Button Functionality**
+**Date**: Current session
+**Issue**: Clear buttons had backwards functionality - labels didn't match behavior
+
+**Problem**: 
+- "🧹 Clear Creatures" button was clearing everything (creatures, swarms, obstacles)
+- "💨 Clear All" button was only clearing swarms
+
+**Fix Applied**:
+- "🧹 Clear Creatures" now only clears creatures (individual entities)
+- "💨 Clear All" now clears everything: creatures + swarms + obstacles
+- Updated console log messages to be more descriptive
+
+**Technical Details**:
+- Fixed in `/modules/game-controls.js` button event handlers
+- Clear Creatures: `gameEngine.removeElement('creature')`
+- Clear All: removes 'creature', 'swarm', and 'obstacle' elements
+
+**Result**: Button behavior now matches user expectations and button labels! 🎯
+
+---
+
 ### 🎨 **JITTER REDUCTION: Calmer Pond Creatures**
 **Date**: Current session
 **Issue**: Fish were exploring more but had become too jittery/nervous

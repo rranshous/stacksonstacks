@@ -109,12 +109,14 @@ export function setupGameControls(gameEngine) {
     // World management
     document.getElementById('clear-world-btn').addEventListener('click', () => {
         gameEngine.removeElement('creature');
-        console.log('🧹 Cleared all creatures!');
+        console.log('🧹 Cleared creatures only!');
     });
     
     document.getElementById('clear-swarms-btn').addEventListener('click', () => {
+        gameEngine.removeElement('creature');
         gameEngine.removeElement('swarm');
-        console.log('💨 Cleared all swarms!');
+        gameEngine.removeElement('obstacle');
+        console.log('💨 Cleared everything (creatures, swarms, obstacles)!');
     });
     
     document.getElementById('cat-swarm-btn').addEventListener('click', () => {
