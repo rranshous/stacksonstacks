@@ -165,14 +165,24 @@ export function setupGameControls(gameEngine) {
         
         if (!gameWorld) return;
         
-        // Debug: Show current live swarms (direct children only)
-        const currentLiveSwarms = Array.from(gameWorld.children).filter(child => 
-            child.tagName.toLowerCase() === 'swarm'
+        // Debug: Show current live game elements (direct children only)
+        const currentLiveElements = Array.from(gameWorld.children).filter(child => 
+            child.tagName.toLowerCase() === 'swarm' || 
+            child.tagName.toLowerCase() === 'win-condition' ||
+            child.tagName.toLowerCase() === 'obstacle'
         );
-        console.log(`🎨 Saving creation with ${currentLiveSwarms.length} creature groups:`);
-        currentLiveSwarms.forEach((swarm, i) => {
-            const creatures = swarm.querySelectorAll('creature');
-            console.log(`  Group ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures, behavior: ${swarm.getAttribute('behavior')})`);
+        console.log(`🎨 Saving creation with ${currentLiveElements.length} game elements:`);
+        currentLiveElements.forEach((element, i) => {
+            if (element.tagName.toLowerCase() === 'swarm') {
+                const creatures = element.querySelectorAll('creature');
+                console.log(`  Group ${i}: ${element.getAttribute('emoji')} (${creatures.length} creatures, behavior: ${element.getAttribute('behavior')})`);
+            } else if (element.tagName.toLowerCase() === 'win-condition') {
+                const nestedSwarms = element.querySelectorAll('swarm');
+                const targets = element.querySelectorAll('target');
+                console.log(`  Win-condition: ${element.getAttribute('type')} (${nestedSwarms.length} swarms, ${targets.length} targets)`);
+            } else {
+                console.log(`  ${element.tagName}: ${element.getAttribute('emoji') || 'unknown'}`);
+            }
         });
         
         // Generate a creative name for this creation
@@ -188,9 +198,9 @@ export function setupGameControls(gameEngine) {
         snapshot.setAttribute('name', snapshotName);
         snapshot.setAttribute('created', new Date().toLocaleTimeString());
         
-        // Deep clone only live swarms (direct children) to prevent mutation
-        const clonedContent = currentLiveSwarms.map(swarm => {
-            const clone = swarm.cloneNode(true);
+        // Deep clone all live game elements (not just swarms) to prevent mutation
+        const clonedContent = currentLiveElements.map(element => {
+            const clone = element.cloneNode(true);
             return clone.outerHTML;
         }).join('\n');
         
