@@ -105,14 +105,59 @@ export class DOMSync {
             // Load targets within this win-condition
             const targets = winCondEl.querySelectorAll('target');
             targets.forEach(targetEl => {
-                winCondition.targets.push({
-                    element: targetEl,
-                    emoji: targetEl.getAttribute('emoji') || '🏠',
-                    x: parseFloat(targetEl.getAttribute('x')) || 0,
-                    y: parseFloat(targetEl.getAttribute('y')) || 0,
-                    width: parseFloat(targetEl.getAttribute('width')) || 80,
-                    height: parseFloat(targetEl.getAttribute('height')) || 80
-                });
+                // Check if target has swarms inside (dynamic creature targets)
+                const targetSwarms = targetEl.querySelectorAll('swarm');
+                if (targetSwarms.length > 0) {
+                    // Dynamic targets: each creature in the swarm becomes a target
+                    targetSwarms.forEach(swarmEl => {
+                        const collisionRadius = parseFloat(swarmEl.getAttribute('collision-radius')) || 35;
+                        const swarm = {
+                            element: swarmEl,
+                            emoji: swarmEl.getAttribute('emoji') || '🐱',
+                            behavior: swarmEl.getAttribute('behavior') || 'wander',
+                            speed: parseFloat(swarmEl.getAttribute('speed')) || 1,
+                            creatures: []
+                        };
+                        
+                        const creatures = swarmEl.querySelectorAll('creature');
+                        creatures.forEach(creatureEl => {
+                            const creature = {
+                                element: creatureEl,
+                                x: parseFloat(creatureEl.getAttribute('x')) || 0,
+                                y: parseFloat(creatureEl.getAttribute('y')) || 0,
+                                vx: parseFloat(creatureEl.getAttribute('vx')) || 0,
+                                vy: parseFloat(creatureEl.getAttribute('vy')) || 0
+                            };
+                            swarm.creatures.push(creature);
+                            
+                            // Each creature becomes a dynamic target
+                            winCondition.targets.push({
+                                element: creatureEl,
+                                emoji: swarm.emoji,
+                                x: creature.x,
+                                y: creature.y,
+                                width: collisionRadius * 2,
+                                height: collisionRadius * 2,
+                                isDynamic: true,
+                                creature: creature // Reference to update position each frame
+                            });
+                        });
+                        
+                        // Also add to main swarms array so they participate in simulation
+                        gameState.swarms.push(swarm);
+                    });
+                } else {
+                    // Static target: traditional fixed area
+                    winCondition.targets.push({
+                        element: targetEl,
+                        emoji: targetEl.getAttribute('emoji') || '🏠',
+                        x: parseFloat(targetEl.getAttribute('x')) || 0,
+                        y: parseFloat(targetEl.getAttribute('y')) || 0,
+                        width: parseFloat(targetEl.getAttribute('width')) || 80,
+                        height: parseFloat(targetEl.getAttribute('height')) || 80,
+                        isDynamic: false
+                    });
+                }
             });
             
             gameState.winConditions.push(winCondition);

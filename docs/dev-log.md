@@ -137,4 +137,43 @@
 
 **Result**: Active kitty chase game now has proper win condition! 🎮🏆
 
+### 🎯 **DYNAMIC TARGETS: Semantic DOM-First Approach**
+**Date**: Current session
+**Feature**: Extended reach-target win-conditions to support dynamic creature targets using pure DOM semantics
+
+**Breakthrough**: Instead of creating a new win-condition type, we extended the existing `reach-target` system to treat swarms inside `<target>` elements as dynamic targets. This is **much more semantic and AI-friendly**.
+
+**DOM Structure**:
+```html
+<win-condition type="reach-target" message="🎉 The dog caught a kitty! You win! 🐕💫">
+    <target>
+        <!-- All cats become targets -->
+        <swarm emoji="🐱" behavior="flee-mouse" speed="2.5" collision-radius="35" count="12">
+            <creature x="150" y="100" vx="1.2" vy="0.8"></creature>
+            <!-- ...more cats... -->
+        </swarm>
+    </target>
+    
+    <!-- Dog as the pursuer -->
+    <swarm emoji="🐕" behavior="chase-mouse" speed="1.8" count="1">
+        <creature x="400" y="300" vx="0" vy="0"></creature>
+    </swarm>
+</win-condition>
+```
+
+**Why This Is Better**:
+- ✅ **Semantic clarity**: Anything inside `<target>` IS the target
+- ✅ **No new win-condition types**: Reuses existing `reach-target` logic
+- ✅ **Mixed target support**: Static targets (🏠) AND dynamic creature targets (🐱) 
+- ✅ **AI-friendly**: Clear parent-child relationships for AI to understand
+- ✅ **Zero redundancy**: No duplicate attributes, collision-radius stays on swarm
+
+**Technical Implementation**:
+- **DOM Sync**: Parses swarms inside `<target>` elements and creates dynamic targets for each creature
+- **Collision Detection**: Hybrid system - rectangular for static targets, circular for creature targets
+- **Position Updates**: Dynamic targets automatically follow their creature positions each frame
+- **Pure Extension**: No changes to existing static target functionality
+
+**Result**: Dog-catches-cat game now works with elegant, semantic DOM structure! 🐕🐱
+
 ---

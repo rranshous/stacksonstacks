@@ -360,6 +360,14 @@ export class Simulation {
         if (winCondition.completed) return; // Already completed
         
         if (winCondition.type === 'reach-target') {
+            // Update dynamic target positions to match their creatures
+            winCondition.targets.forEach(target => {
+                if (target.isDynamic && target.creature) {
+                    target.x = target.creature.x - target.width / 2; // Center the target on creature
+                    target.y = target.creature.y - target.height / 2;
+                }
+            });
+            
             // Check if any creature from the win-condition's swarms has reached any target
             const hasReachedTarget = winCondition.swarms.some(swarm => 
                 swarm.creatures.some(creature => 
@@ -381,10 +389,23 @@ export class Simulation {
         const centerX = creature.x;
         const centerY = creature.y;
         
-        return (centerX >= target.x && 
-                centerX <= target.x + target.width &&
-                centerY >= target.y && 
-                centerY <= target.y + target.height);
+        if (target.isDynamic) {
+            // Dynamic creature target: use circular collision detection
+            const targetCenterX = target.x + target.width / 2;
+            const targetCenterY = target.y + target.height / 2;
+            const dx = centerX - targetCenterX;
+            const dy = centerY - targetCenterY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const collisionRadius = target.width / 2; // target.width is collision-radius * 2
+            
+            return distance <= collisionRadius;
+        } else {
+            // Static rectangular target: use bounding box collision
+            return (centerX >= target.x && 
+                    centerX <= target.x + target.width &&
+                    centerY >= target.y && 
+                    centerY <= target.y + target.height);
+        }
     }
     
     showWinMessage(message) {
