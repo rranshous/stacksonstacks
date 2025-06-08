@@ -42,6 +42,13 @@ export class Simulation {
             });
         }
         
+        // Check win conditions
+        if (gameState.winConditions) {
+            gameState.winConditions.forEach(winCondition => {
+                this.checkWinCondition(winCondition);
+            });
+        }
+        
         return gameState;
     }
     
@@ -344,5 +351,89 @@ export class Simulation {
             creature.y = obstacleBottom + creatureSize/2;
             creature.vy = 0;
         }
+    }
+    
+    checkWinCondition(winCondition) {
+        if (winCondition.completed) return; // Already completed
+        
+        if (winCondition.type === 'reach-target') {
+            // Check if any creature from the win-condition's swarms has reached any target
+            const hasReachedTarget = winCondition.swarms.some(swarm => 
+                swarm.creatures.some(creature => 
+                    winCondition.targets.some(target => 
+                        this.isCreatureInTarget(creature, target)
+                    )
+                )
+            );
+            
+            if (hasReachedTarget) {
+                winCondition.completed = true;
+                this.showWinMessage(winCondition.message);
+            }
+        }
+    }
+    
+    isCreatureInTarget(creature, target) {
+        const creatureSize = 30; // Match renderer creature size
+        const centerX = creature.x;
+        const centerY = creature.y;
+        
+        return (centerX >= target.x && 
+                centerX <= target.x + target.width &&
+                centerY >= target.y && 
+                centerY <= target.y + target.height);
+    }
+    
+    showWinMessage(message) {
+        // Create a temporary celebration overlay
+        console.log('WIN CONDITION MET:', message);
+        
+        // Find or create win message element
+        let winMessageEl = document.getElementById('win-message');
+        if (!winMessageEl) {
+            winMessageEl = document.createElement('div');
+            winMessageEl.id = 'win-message';
+            winMessageEl.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 255, 0, 0.9);
+                color: white;
+                padding: 20px 40px;
+                border-radius: 20px;
+                font-size: 24px;
+                font-weight: bold;
+                z-index: 1000;
+                text-align: center;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                animation: celebration 3s ease-out forwards;
+            `;
+            document.body.appendChild(winMessageEl);
+            
+            // Add CSS animation if not already present
+            if (!document.getElementById('celebration-style')) {
+                const style = document.createElement('style');
+                style.id = 'celebration-style';
+                style.textContent = `
+                    @keyframes celebration {
+                        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+                        100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        winMessageEl.textContent = message;
+        winMessageEl.style.display = 'block';
+        
+        // Auto-hide after animation
+        setTimeout(() => {
+            if (winMessageEl) {
+                winMessageEl.style.display = 'none';
+            }
+        }, 3000);
     }
 }

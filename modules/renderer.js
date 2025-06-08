@@ -33,6 +33,13 @@ export class Renderer {
                 this.ctx.fillText(swarm.emoji, creature.x, creature.y);
             });
         });
+        
+        // Render win-condition targets
+        if (gameState.winConditions) {
+            gameState.winConditions.forEach(winCondition => {
+                winCondition.targets.forEach(target => this.drawTarget(target));
+            });
+        }
     }
     
     renderMouseTargets(targets) {
@@ -138,6 +145,32 @@ export class Renderer {
         this.ctx.textBaseline = 'middle';
         this.ctx.fillStyle = 'black';
         this.ctx.fillText(obstacle.emoji, 0, 0);
+        
+        this.ctx.restore();
+    }
+    
+    drawTarget(target) {
+        this.ctx.save();
+        
+        // Draw target background with a welcoming glow
+        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.2)';
+        this.ctx.fillRect(target.x, target.y, target.width, target.height);
+        
+        // Draw target border with animated glow
+        const time = Date.now() * 0.003;
+        const glowIntensity = (Math.sin(time) + 1) * 0.5; // Pulse between 0 and 1
+        this.ctx.strokeStyle = `rgba(0, 255, 0, ${0.5 + glowIntensity * 0.3})`;
+        this.ctx.lineWidth = 3;
+        this.ctx.strokeRect(target.x, target.y, target.width, target.height);
+        
+        // Draw target emoji in center
+        this.ctx.font = `${Math.min(target.width, target.height) * 0.6}px Arial`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(target.emoji, 
+            target.x + target.width / 2, 
+            target.y + target.height / 2);
         
         this.ctx.restore();
     }

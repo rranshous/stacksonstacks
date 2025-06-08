@@ -135,4 +135,8 @@ export class GameEngine {
     createObstacle(emoji, x, y, width, height, behavior = 'static', collision = 'solid') {
         return this.domTools.createObstacle(this.gameWorld, emoji, x, y, width, height, behavior, collision);
     }
+    
+    createIntroGame() {
+        return this.domTools.createIntroGame(this.gameWorld);
+    }
 }
