@@ -228,22 +228,22 @@ export function setupGameControls(gameEngine) {
         
         console.log(`🔄 Restoring snapshot: "${snapshotName}"`);
         
-        // Debug: Show current live swarms (direct children only)
-        const currentLiveSwarms = Array.from(gameWorld.children).filter(child => 
-            child.tagName.toLowerCase() === 'swarm'
+        // Debug: Show current live elements (direct children only)
+        const currentLiveElements = Array.from(gameWorld.children).filter(child => 
+            child.tagName.toLowerCase() === 'swarm' || 
+            child.tagName.toLowerCase() === 'win-condition' ||
+            child.tagName.toLowerCase() === 'obstacle'
         );
-        const snapshotSwarms = snapshot.querySelectorAll('swarm');
+        const snapshotElements = snapshot.children;
         
-        console.log(`📊 Current live swarms: ${currentLiveSwarms.length}`);
-        currentLiveSwarms.forEach((swarm, i) => {
-            const creatures = swarm.querySelectorAll('creature');
-            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures)`);
+        console.log(`📊 Current live elements: ${currentLiveElements.length}`);
+        currentLiveElements.forEach((element, i) => {
+            console.log(`  ${element.tagName}: ${element.getAttribute('emoji') || element.getAttribute('type') || 'unknown'}`);
         });
         
-        console.log(`📸 Snapshot swarms: ${snapshotSwarms.length}`);
-        snapshotSwarms.forEach((swarm, i) => {
-            const creatures = swarm.querySelectorAll('creature');
-            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures)`);
+        console.log(`📸 Snapshot elements: ${snapshotElements.length}`);
+        Array.from(snapshotElements).forEach((element, i) => {
+            console.log(`  ${element.tagName}: ${element.getAttribute('emoji') || element.getAttribute('type') || 'unknown'}`);
         });
         
         // Preserve all snapshots (remove them from DOM temporarily)
@@ -251,16 +251,18 @@ export function setupGameControls(gameEngine) {
         console.log(`💾 Preserving ${allSnapshots.length} snapshots`);
         allSnapshots.forEach(snap => snap.remove());
         
-        // Remove only live swarms (direct children)
-        currentLiveSwarms.forEach(swarm => swarm.remove());
+        // Remove only live swarms and win-conditions (direct children) 
+        currentLiveElements.forEach(element => element.remove());
         
         // Restore the snapshot content
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = snapshot.innerHTML;
         
-        // Add back the restored swarms as direct children
+        // Add back all restored game elements as direct children
         Array.from(tempDiv.children).forEach(child => {
-            if (child.tagName.toLowerCase() === 'swarm') {
+            if (child.tagName.toLowerCase() === 'swarm' || 
+                child.tagName.toLowerCase() === 'win-condition' ||
+                child.tagName.toLowerCase() === 'obstacle') {
                 gameWorld.appendChild(child);
             }
         });
@@ -271,11 +273,23 @@ export function setupGameControls(gameEngine) {
         });
         
         // Debug: Show what we restored
-        const restoredSwarms = gameWorld.querySelectorAll('swarm:not(snapshot swarm)');
-        console.log(`✅ Restored ${restoredSwarms.length} swarms`);
-        restoredSwarms.forEach((swarm, i) => {
-            const creatures = swarm.querySelectorAll('creature');
-            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures)`);
+        const restoredElements = Array.from(gameWorld.children).filter(child => 
+            child.tagName.toLowerCase() === 'swarm' || 
+            child.tagName.toLowerCase() === 'win-condition' ||
+            child.tagName.toLowerCase() === 'obstacle'
+        );
+        console.log(`✅ Restored ${restoredElements.length} game elements`);
+        restoredElements.forEach((element, i) => {
+            if (element.tagName.toLowerCase() === 'swarm') {
+                const creatures = element.querySelectorAll('creature');
+                console.log(`  Swarm: ${element.getAttribute('emoji')} (${creatures.length} creatures)`);
+            } else if (element.tagName.toLowerCase() === 'win-condition') {
+                const nestedSwarms = element.querySelectorAll('swarm');
+                const targets = element.querySelectorAll('target');
+                console.log(`  Win-condition: ${element.getAttribute('type')} (${nestedSwarms.length} swarms, ${targets.length} targets)`);
+            } else {
+                console.log(`  ${element.tagName}: ${element.getAttribute('emoji') || 'unknown'}`);
+            }
         });
         
         console.log(`🌟 Restored to magical moment: "${snapshotName}"`);
