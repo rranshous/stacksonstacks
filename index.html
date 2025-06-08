@@ -201,11 +201,6 @@
                 </div>
                 
                 <div class="control-section">
-                    <h4>🎯 Simple Games</h4>
-                    <button id="create-intro-game-btn">🏠 Cat Goes Home</button>
-                </div>
-                
-                <div class="control-section">
                     <h4>🚧 Add Obstacles</h4>
                     <button id="add-rock-btn">🗿 Rock</button>
                     <button id="add-tree-btn">🌲 Tree</button>
@@ -220,14 +215,9 @@
             </div>
         </div>
         
-        <!-- Right Panel: Canvas & Debug -->
+        <!-- Right Panel: Canvas -->
         <div class="canvas-panel">
             <canvas id="game-canvas" width="800" height="600"></canvas>
-            
-            <div id="debug-panel">
-                <strong>DOM State:</strong>
-                <div id="dom-output"></div>
-            </div>
         </div>
     </div>
     
@@ -281,6 +271,16 @@
                 <creature x="500" y="80" vx="-0.5" vy="0.9"></creature>
                 <creature x="600" y="520" vx="0.9" vy="-0.6"></creature>
             </swarm>
+        </snapshot>
+        
+        <!-- Cat Goes Home: Simple intro game with win condition -->
+        <snapshot name="🏠 Cat Goes Home" created="intro-game">
+            <win-condition type="reach-target" message="🎉 Cat made it home safely!">
+                <swarm emoji="🐱" behavior="chase" speed="2" count="1">
+                    <creature x="100" y="100" vx="0" vy="0"></creature>
+                </swarm>
+                <target emoji="🏠" x="700" y="500" width="80" height="80"></target>
+            </win-condition>
         </snapshot>
     </game-world>
 

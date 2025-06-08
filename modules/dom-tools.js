@@ -101,34 +101,4 @@ export class DOMTools {
         
         return target;
     }
-    
-    createIntroGame(gameWorld) {
-        // Clear existing content
-        gameWorld.innerHTML = '';
-        
-        // Create win condition
-        const winCondition = this.createWinCondition(gameWorld, 'reach-target', '🎉 Cat made it home safely!');
-        
-        // Create swarm with single cat
-        const swarm = this.createElement(winCondition, 'swarm', {
-            emoji: '🐱',
-            behavior: 'chase',
-            speed: 2,
-            count: 1
-        });
-        
-        // Add the cat at a starting position
-        this.createElement(swarm, 'creature', {
-            x: 100,
-            y: 100,
-            vx: 0,
-            vy: 0
-        });
-        
-        // Create target house
-        this.createTarget(winCondition, '🏠', 700, 500, 80, 80);
-        
-        console.log('🎮 Created intro game: Guide the cat home!');
-        return winCondition;
-    }
 }

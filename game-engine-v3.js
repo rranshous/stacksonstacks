@@ -12,7 +12,6 @@ export class GameEngine {
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.gameWorld = document.querySelector('game-world');
-        this.debugOutput = document.getElementById('dom-output');
         
         this.lastTime = 0;
         this.running = false;
@@ -82,37 +81,7 @@ export class GameEngine {
         // 4. Render from current state
         this.renderer.render(updatedState, this.simulation);
         
-        // 5. Update debug info
-        this.updateDebugInfo();
-        
         requestAnimationFrame((time) => this.gameLoop(time));
-    }
-    
-    updateDebugInfo() {
-        // Show current DOM state in debug panel
-        const swarms = this.gameWorld.querySelectorAll('swarm');
-        let debugInfo = '';
-        
-        debugInfo += `Mouse: (${this.simulation.mouseX.toFixed(1)}, ${this.simulation.mouseY.toFixed(1)})\n`;
-        debugInfo += `Targets: ${this.simulation.mouseTargets.length}\n\n`;
-        
-        swarms.forEach((swarm, i) => {
-            const emoji = swarm.getAttribute('emoji');
-            const behavior = swarm.getAttribute('behavior');
-            const creatureCount = swarm.querySelectorAll('creature').length;
-            
-            debugInfo += `Swarm ${i + 1}: ${emoji} (${creatureCount} creatures, ${behavior})\n`;
-            
-            // Show first creature's position as example
-            const firstCreature = swarm.querySelector('creature');
-            if (firstCreature) {
-                const x = parseFloat(firstCreature.getAttribute('x')).toFixed(1);
-                const y = parseFloat(firstCreature.getAttribute('y')).toFixed(1);
-                debugInfo += `  First creature: (${x}, ${y})\n`;
-            }
-        });
-        
-        this.debugOutput.textContent = debugInfo;
     }
     
     // Expose DOM tools for external use
@@ -134,9 +103,5 @@ export class GameEngine {
     
     createObstacle(emoji, x, y, width, height, behavior = 'static', collision = 'solid') {
         return this.domTools.createObstacle(this.gameWorld, emoji, x, y, width, height, behavior, collision);
-    }
-    
-    createIntroGame() {
-        return this.domTools.createIntroGame(this.gameWorld);
     }
 }

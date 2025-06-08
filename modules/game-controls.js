@@ -153,12 +153,6 @@ export function setupGameControls(gameEngine) {
         console.log('🌀 Added spinning obstacle!');
     });
     
-    // Game creation buttons
-    document.getElementById('create-intro-game-btn')?.addEventListener('click', () => {
-        gameEngine.createIntroGame();
-        console.log('🏠 Created intro game: Guide the cat home!');
-    });
-    
     // Snapshot functionality (DOM-everything approach)
     document.getElementById('save-snapshot-btn').addEventListener('click', () => {
         createSnapshot();
