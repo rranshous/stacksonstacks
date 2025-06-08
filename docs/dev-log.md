@@ -176,4 +176,34 @@
 
 **Result**: Dog-catches-cat game now works with elegant, semantic DOM structure! 🐕🐱
 
+### 🔧 **BUG FIX: Repeatable Win Conditions**
+**Date**: Current session  
+**Issue**: Win conditions only triggered once per game session, then stopped working
+
+**Problem**: Once `winCondition.completed` was set to `true`, it never reset, preventing subsequent wins in chase-style games where multiple collisions should each trigger celebration.
+
+**Solution**: Added auto-reset logic with 500ms cooldown:
+- Win condition triggers and shows message
+- After 500ms delay, `completed` resets to `false` 
+- Prevents message spam while allowing repeated wins
+- Perfect for chase games like "dog catches cat"
+
+**Result**: Every collision now properly shows win celebration! 🎉
+
 ---
+
+### 🔧 **BUG FIX: Mouse Interaction Timing**
+**Date**: Current session
+**Issue**: Win banner only appeared when mouse moved off screen, suggesting timing conflict
+
+**Root Cause**: Win condition checking happened AFTER creature movement in each frame:
+1. Mouse on canvas → cats flee aggressively 
+2. Dog gets close → movement update makes cats escape before collision detected
+3. Mouse leaves → cats stop fleeing → collision detection finally works
+
+**Solution**: Reordered simulation update sequence to check win conditions BEFORE creature movement
+- Moved `checkWinCondition()` to run before `updateCreature()` in simulation loop
+- Ensures collision detection captures the exact moment of contact
+- Removes dependency on mouse position for win detection timing
+
+**Result**: Win condition now triggers immediately when dog catches cat, regardless of mouse position! 🎯✨

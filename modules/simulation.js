@@ -25,6 +25,13 @@ export class Simulation {
             .map(target => ({ ...target, life: target.life - 1 }))
             .filter(target => target.life > 0);
         
+        // Check win conditions BEFORE movement to catch collisions
+        if (gameState.winConditions) {
+            gameState.winConditions.forEach(winCondition => {
+                this.checkWinCondition(winCondition);
+            });
+        }
+        
         // Process each swarm
         gameState.swarms.forEach(swarm => {
             swarm.creatures.forEach(creature => {
@@ -39,13 +46,6 @@ export class Simulation {
         if (gameState.obstacles) {
             gameState.obstacles.forEach(obstacle => {
                 this.updateObstacle(obstacle, deltaTime);
-            });
-        }
-        
-        // Check win conditions
-        if (gameState.winConditions) {
-            gameState.winConditions.forEach(winCondition => {
-                this.checkWinCondition(winCondition);
             });
         }
         
@@ -380,6 +380,11 @@ export class Simulation {
             if (hasReachedTarget) {
                 winCondition.completed = true;
                 this.showWinMessage(winCondition.message);
+                
+                // Reset win condition after a brief delay to allow for repeated wins
+                setTimeout(() => {
+                    winCondition.completed = false;
+                }, 500); // Half second cooldown to prevent spam
             }
         }
     }
