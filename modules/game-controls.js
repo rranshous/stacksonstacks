@@ -55,17 +55,17 @@ export function setupGameControls(gameEngine) {
     
     // Mouse interaction behaviors
     document.getElementById('chase-mouse-btn').addEventListener('click', () => {
-        gameEngine.createSwarm('🐕', 'chase', 2, 3);
+        gameEngine.createSwarm('🐕', 'chase-mouse', 2, 3);
         console.log('🐕 Added dogs that chase mouse!');
     });
     
     document.getElementById('flee-mouse-btn').addEventListener('click', () => {
-        gameEngine.createSwarm('🐰', 'flee', 2.5, 5);
+        gameEngine.createSwarm('🐰', 'flee-mouse', 2.5, 5);
         console.log('🐰 Added rabbits that flee from mouse!');
     });
     
     document.getElementById('orbit-mouse-btn').addEventListener('click', () => {
-        gameEngine.createSwarm('⭐', 'orbit', 3, 4);
+        gameEngine.createSwarm('⭐', 'orbit-mouse', 3, 4);
         console.log('⭐ Added stars that orbit mouse!');
     });
     
@@ -76,7 +76,7 @@ export function setupGameControls(gameEngine) {
     
     // Behavior modifications
     document.getElementById('make-chasers-btn').addEventListener('click', () => {
-        gameEngine.modifyElement('swarm', 'behavior', 'chase');
+        gameEngine.modifyElement('swarm', 'behavior', 'chase-mouse');
         console.log('🎯 Made all creatures chase mouse!');
     });
     
@@ -86,7 +86,7 @@ export function setupGameControls(gameEngine) {
     });
     
     document.getElementById('make-orbiters-btn').addEventListener('click', () => {
-        gameEngine.modifyElement('swarm', 'behavior', 'orbit');
+        gameEngine.modifyElement('swarm', 'behavior', 'orbit-mouse');
         console.log('🌀 Made all creatures orbit mouse!');
     });
     
@@ -125,14 +125,14 @@ export function setupGameControls(gameEngine) {
     });
     
     document.getElementById('fish-school-btn').addEventListener('click', () => {
-        gameEngine.createSwarm('🐟', 'orbit', 2.5, 8);
+        gameEngine.createSwarm('🐟', 'orbit-mouse', 2.5, 8);
         console.log('🐟 Added fish school that orbits!');
     });
     
     document.getElementById('bug-party-btn').addEventListener('click', () => {
         const bugs = ['🐛', '🦗', '🕷️', '🐜'];
         bugs.forEach(bug => {
-            gameEngine.createSwarm(bug, 'chase', Math.random() * 2 + 1, 2);
+            gameEngine.createSwarm(bug, 'chase-mouse', Math.random() * 2 + 1, 2);
         });
         console.log('🐛 Added bug party!');
     });

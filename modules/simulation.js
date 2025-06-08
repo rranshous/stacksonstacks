@@ -70,15 +70,18 @@ export class Simulation {
                 this.wanderBehavior(creature, speed);
                 break;
                 
-            case 'chase':
+            case 'chase-mouse':
+            case 'chase': // backward compatibility
                 this.chaseBehavior(creature, speed);
                 break;
                 
-            case 'flee':
+            case 'flee-mouse':
+            case 'flee': // backward compatibility
                 this.fleeBehavior(creature, speed);
                 break;
                 
-            case 'orbit':
+            case 'orbit-mouse':
+            case 'orbit': // backward compatibility
                 this.orbitBehavior(creature, speed);
                 break;
                 
