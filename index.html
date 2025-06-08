@@ -287,6 +287,34 @@
             </win-condition>
         </snapshot>
         
+        <!-- Chase Game: Dog catches cats! -->
+        <snapshot name="🐕 Dog Catches Cats" created="chase-game">
+            <win-condition type="reach-target" message="🎉 The dog caught a kitty! You win! 🐕💫">
+                <target>
+                    <!-- All cats become targets -->
+                    <swarm emoji="🐱" behavior="flee-mouse" speed="2.5" collision-radius="35" count="12">
+                        <creature x="150" y="100" vx="1.2" vy="0.8"></creature>
+                        <creature x="650" y="120" vx="-1.0" vy="1.1"></creature>
+                        <creature x="300" y="180" vx="0.9" vy="-0.7"></creature>
+                        <creature x="550" y="200" vx="-1.3" vy="0.6"></creature>
+                        <creature x="200" y="300" vx="1.1" vy="1.0"></creature>
+                        <creature x="700" y="280" vx="-0.8" vy="-1.2"></creature>
+                        <creature x="100" y="400" vx="1.4" vy="0.5"></creature>
+                        <creature x="600" y="450" vx="-1.1" vy="-0.9"></creature>
+                        <creature x="350" y="500" vx="0.7" vy="1.3"></creature>
+                        <creature x="500" y="350" vx="-1.0" vy="0.8"></creature>
+                        <creature x="250" y="250" vx="1.2" vy="-1.1"></creature>
+                        <creature x="450" y="150" vx="-0.9" vy="1.0"></creature>
+                    </swarm>
+                </target>
+                
+                <!-- Dog as the pursuer -->
+                <swarm emoji="🐕" behavior="chase-mouse" speed="1.8" count="1">
+                    <creature x="400" y="300" vx="0" vy="0"></creature>
+                </swarm>
+            </win-condition>
+        </snapshot>
+        
         <!-- Empty Canvas: Start from scratch -->
         <snapshot name="🎨 Blank Canvas" created="empty-start">
         </snapshot>
