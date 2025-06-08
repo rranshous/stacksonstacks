@@ -25,8 +25,8 @@ export function setupGameControls(gameEngine) {
     });
     
     document.getElementById('voice-btn').addEventListener('click', () => {
-        console.log('🎤 Voice recognition not implemented yet');
-        alert('Voice recognition coming soon! Use other buttons for now.');
+        console.log('🎤 Voice collaboration not implemented yet');
+        alert('🗣️ Voice collaboration coming soon! Create together by speaking your ideas.');
     });
     
     // Basic creature spawning
@@ -169,17 +169,17 @@ export function setupGameControls(gameEngine) {
         const currentLiveSwarms = Array.from(gameWorld.children).filter(child => 
             child.tagName.toLowerCase() === 'swarm'
         );
-        console.log(`📊 Creating snapshot with ${currentLiveSwarms.length} live swarms:`);
+        console.log(`🎨 Saving creation with ${currentLiveSwarms.length} creature groups:`);
         currentLiveSwarms.forEach((swarm, i) => {
             const creatures = swarm.querySelectorAll('creature');
-            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures, behavior: ${swarm.getAttribute('behavior')})`);
+            console.log(`  Group ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures, behavior: ${swarm.getAttribute('behavior')})`);
         });
         
-        // Generate a magical name for this moment
+        // Generate a creative name for this creation
         const names = [
-            'Firefly Dance', 'Zen Pond', 'Magical Swimming', 'Peaceful Waters',
-            'Glowing Night', 'Pond Harmony', 'Sparkle Time', 'Gentle Swim',
-            'Magic Moment', 'Serene Pond', 'Dancing Lights', 'Calm Waters'
+            'Creature Playground', 'Wild Adventure', 'Animal Kingdom', 'Nature Scene',
+            'Ecosystem Garden', 'Critter World', 'Life Simulation', 'Creature Haven',
+            'Interactive Zoo', 'Digital Habitat', 'Living Canvas', 'Creature Chaos'
         ];
         const snapshotName = names[Math.floor(Math.random() * names.length)];
         
@@ -201,7 +201,7 @@ export function setupGameControls(gameEngine) {
         
         // Create gallery button for navigation
         const snapshotBtn = document.createElement('button');
-        snapshotBtn.textContent = `🌟 ${snapshotName}`;
+        snapshotBtn.textContent = `🎮 ${snapshotName}`;
         snapshotBtn.style.display = 'block';
         snapshotBtn.style.margin = '3px 0';
         snapshotBtn.style.fontSize = '10px';
@@ -213,7 +213,7 @@ export function setupGameControls(gameEngine) {
         
         gallery.appendChild(snapshotBtn);
         
-        console.log(`📸 Saved magical moment: "${snapshotName}" with ${clonedContent.length} chars of frozen content`);
+        console.log(`💾 Saved creation: "${snapshotName}" with ${clonedContent.length} chars of game content`);
     }
     
     // Restore a snapshot using DOM traversal
@@ -292,7 +292,7 @@ export function setupGameControls(gameEngine) {
             }
         });
         
-        console.log(`🌟 Restored to magical moment: "${snapshotName}"`);
+        console.log(`🎮 Loaded game: "${snapshotName}"`);
     }
     
     // Initialize gallery with existing snapshots in DOM
@@ -304,7 +304,7 @@ export function setupGameControls(gameEngine) {
             const snapshotName = snapshot.getAttribute('name');
             
             const snapshotBtn = document.createElement('button');
-            snapshotBtn.textContent = `🌟 ${snapshotName}`;
+            snapshotBtn.textContent = `${snapshotName}`;
             snapshotBtn.style.display = 'block';
             snapshotBtn.style.margin = '3px 0';
             snapshotBtn.style.fontSize = '10px';
@@ -318,7 +318,7 @@ export function setupGameControls(gameEngine) {
         });
         
         if (existingSnapshots.length > 0) {
-            console.log(`🌟 Found ${existingSnapshots.length} existing magical moments`);
+            console.log(`🎮 Found ${existingSnapshots.length} existing game templates`);
         }
     }
 }

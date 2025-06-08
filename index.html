@@ -144,24 +144,29 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Left Panel: Controls -->
+        <!-- Left Panel: Creation Tools -->
         <div class="controls-panel">
-            <h1 class="app-title">🌙 Magic Pond</h1>
+            <h1 class="app-title">🎮 Game Creator</h1>
             
             <div class="instructions">
-                <p>🖱️ <strong>Move mouse</strong> to guide fireflies ✨</p>
-                <p>🎯 <strong>Click pond</strong> for frogs to hop there 🐸</p>
-                <p>🐟 <strong>Fish swim</strong> peacefully in center</p>
-                <p>🎮 <strong>Use buttons</strong> to add more magic</p>
+                <p>🤖 <strong>Collaborative Frame</strong> - Create games together!</p>
+                <p>🖱️ <strong>Move mouse</strong> to guide creatures</p>
+                <p>🎯 <strong>Click canvas</strong> to place targets</p>
+                <p>🗣️ <strong>Soon:</strong> Speak your ideas to life</p>
             </div>
             
             <div class="voice-controls">
-                <button id="voice-btn">🎤 Speak Command</button>
-                <button id="test-ai-btn">🧠 Test AI</button>
+                <button id="voice-btn">🎤 Voice Commands (Soon)</button>
+                <button id="test-ai-btn">🧠 Test AI Tools</button>
             </div>
             
             <div class="game-controls">
-                <h3>🎮 Game Controls</h3>
+                <h3>🛠️ Creation Tools</h3>
+                
+                <div class="control-section">
+                    <h4>🎯 Quick Start Games</h4>
+                    <div id="snapshots-gallery"></div>
+                </div>
                 
                 <div class="control-section">
                     <h4>➕ Add Creatures</h4>
@@ -173,7 +178,7 @@
                 </div>
                 
                 <div class="control-section">
-                    <h4>🖱️ Mouse Interactions</h4>
+                    <h4>🖱️ Mouse Behaviors</h4>
                     <button id="chase-mouse-btn">🐕 Chase Mouse</button>
                     <button id="flee-mouse-btn">🐰 Flee Mouse</button>
                     <button id="orbit-mouse-btn">⭐ Orbit Mouse</button>
@@ -181,76 +186,54 @@
                 </div>
                 
                 <div class="control-section">
-                    <h4>🎭 Change Behaviors</h4>
-                    <button id="make-chasers-btn">🎯 All Chase</button>
-                    <button id="make-wanderers-btn">🚶 All Wander</button>
-                    <button id="make-orbiters-btn">🌀 All Orbit</button>
-                </div>
-                
-                <div class="control-section">
-                    <h4>⚡ Speed Control</h4>
-                    <button id="slow-down-btn">🐌 Slow</button>
-                    <button id="normal-speed-btn">🏃 Normal</button>
-                    <button id="speed-up-btn">⚡ Fast</button>
-                </div>
-                
-                <div class="control-section">
-                    <h4>📸 Magical Moments</h4>
-                    <button id="save-snapshot-btn">📸 Save Moment</button>
-                    <div id="snapshots-gallery"></div>
-                </div>
-                
-                <div class="control-section">
-                    <h4>🚧 Add Obstacles</h4>
+                    <h4>🚧 Add Environment</h4>
                     <button id="add-rock-btn">🗿 Rock</button>
                     <button id="add-tree-btn">🌲 Tree</button>
                     <button id="add-spinning-btn">🌀 Spinner</button>
                 </div>
                 
                 <div class="control-section">
-                    <h4>🧹 Clear World</h4>
+                    <h4>🎭 Modify Behaviors</h4>
+                    <button id="make-chasers-btn">🎯 All Chase</button>
+                    <button id="make-wanderers-btn">🚶 All Wander</button>
+                    <button id="make-orbiters-btn">🌀 All Orbit</button>
+                </div>
+                
+                <div class="control-section">
+                    <h4>⚡ Adjust Speed</h4>
+                    <button id="slow-down-btn">🐌 Slow</button>
+                    <button id="normal-speed-btn">🏃 Normal</button>
+                    <button id="speed-up-btn">⚡ Fast</button>
+                </div>
+                
+                <div class="control-section">
+                    <h4>🧹 Workspace</h4>
                     <button id="clear-world-btn">🧹 Clear Creatures</button>
                     <button id="clear-swarms-btn">💨 Clear All</button>
+                    <button id="save-snapshot-btn">💾 Save Creation</button>
                 </div>
             </div>
         </div>
         
-        <!-- Right Panel: Canvas -->
+        <!-- Right Panel: Collaborative Canvas -->
         <div class="canvas-panel">
+            <h2 style="margin: 0 0 15px 0; color: #60a5fa; text-align: center;">🤝 Collaborative Frame</h2>
             <canvas id="game-canvas" width="800" height="600"></canvas>
+            <p style="text-align: center; color: #888; margin: 10px 0 0 0; font-size: 12px;">
+                Mouse to guide • Click to target • Create together
+            </p>
         </div>
     </div>
     
-    <!-- Game World: The Live State -->
+    <!-- Game World: The Live Creative State -->
     <game-world style="display: none;">
-        <!-- Magic Pond Demo: Serene, magical ecosystem on load -->
-        
-        <!-- Fish swimming in gentle patterns in the center pond -->
-        <swarm emoji="🐟" count="4" behavior="wander" speed="1.2">
-            <creature x="350" y="280" vx="0.5" vy="0.2"></creature>
-            <creature x="420" y="320" vx="-0.3" vy="0.4"></creature>
-            <creature x="380" y="350" vx="0.7" vy="-0.1"></creature>
-            <creature x="450" y="300" vx="-0.4" vy="-0.3"></creature>
-        </swarm>
-        
-        <!-- Frogs on the pond edges that hop toward clicked locations -->
-        <swarm emoji="🐸" count="3" behavior="seek-targets" speed="2.0">
-            <creature x="150" y="200" vx="0" vy="0"></creature>
-            <creature x="650" y="180" vx="0" vy="0"></creature>
-            <creature x="200" y="450" vx="0" vy="0"></creature>
-        </swarm>
-        
-        <!-- Fireflies that orbit around your mouse cursor -->
-        <swarm emoji="✨" count="5" behavior="orbit" speed="1.2">
-            <creature x="100" y="100" vx="1" vy="0.5"></creature>
-            <creature x="700" y="120" vx="-0.8" vy="0.7"></creature>
-            <creature x="300" y="500" vx="0.6" vy="-0.4"></creature>
+        <!-- Start with empty canvas for collaborative creation -->
             <creature x="500" y="80" vx="-0.5" vy="0.9"></creature>
             <creature x="600" y="520" vx="0.9" vy="-0.6"></creature>
         </swarm>
         
-        <!-- Recursive snapshot: Magic Pond as the first moment -->
-        <snapshot name="Magic Pond" created="zen-moment">
+        <!-- Demo Games: Templates for collaboration -->
+        <snapshot name="🌊 Peaceful Pond" created="demo-template">
             <swarm emoji="🐟" count="4" behavior="wander" speed="1.2">
                 <creature x="350" y="280" vx="0.5" vy="0.2"></creature>
                 <creature x="420" y="320" vx="-0.3" vy="0.4"></creature>
@@ -273,14 +256,18 @@
             </swarm>
         </snapshot>
         
-        <!-- Cat Goes Home: Simple intro game with win condition -->
-        <snapshot name="🏠 Cat Goes Home" created="intro-game">
+        <!-- Herding Game: Guide creatures to safety -->
+        <snapshot name="🏠 Cat Goes Home" created="herding-game">
             <win-condition type="reach-target" message="🎉 Cat made it home safely!">
                 <swarm emoji="🐱" behavior="chase" speed="2" count="1">
                     <creature x="100" y="100" vx="0" vy="0"></creature>
                 </swarm>
                 <target emoji="🏠" x="700" y="500" width="80" height="80"></target>
             </win-condition>
+        </snapshot>
+        
+        <!-- Empty Canvas: Start from scratch -->
+        <snapshot name="🎨 Blank Canvas" created="empty-start">
         </snapshot>
     </game-world>
 
