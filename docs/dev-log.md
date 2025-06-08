@@ -207,3 +207,23 @@
 - Removes dependency on mouse position for win detection timing
 
 **Result**: Win condition now triggers immediately when dog catches cat, regardless of mouse position! 🎯✨
+
+---
+
+### 🔧 **BUG FIX: Win Banner Animation Reuse**
+**Date**: Current session  
+**Issue**: Win banner only appeared once per session, then stopped showing despite console logs indicating wins were detected
+
+**Root Cause**: CSS animation element reuse problem:
+1. First win creates element with `animation: celebration 3s ease-out forwards`
+2. Animation completes and stays at final state (`forwards` keeps it there)
+3. Subsequent wins reuse same element, but CSS animation doesn't restart
+4. Tab switching forces repaint, temporarily making it visible again
+
+**Solution**: Always create fresh element for each win message
+- Remove existing win message element before creating new one
+- Fresh element gets fresh animation each time
+- Changed from `style.display = 'block'` to element creation/removal approach
+- Ensures animation triggers properly every time
+
+**Result**: Win banner now appears every single time dog catches cat! 🎉✨

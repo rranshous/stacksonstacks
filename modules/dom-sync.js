@@ -75,9 +75,9 @@ export class DOMSync {
                 targets: []
             };
             
-            // Load swarms within this win-condition
-            const nestedSwarms = winCondEl.querySelectorAll('swarm');
-            nestedSwarms.forEach(swarmEl => {
+            // Load swarms within this win-condition (only direct children, not inside targets)
+            const directSwarms = Array.from(winCondEl.children).filter(child => child.tagName.toLowerCase() === 'swarm');
+            directSwarms.forEach(swarmEl => {
                 const swarm = {
                     element: swarmEl,
                     emoji: swarmEl.getAttribute('emoji') || '🐱',
