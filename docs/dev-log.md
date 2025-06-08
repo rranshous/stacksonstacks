@@ -404,4 +404,43 @@ DOM → DOMSync.loadGameState() → Simulation.update() → DOMSync.saveGameStat
 
 ---
 
+### 📸 **SNAPSHOT SYSTEM COMPLETED: Non-Recursive Design**
+**Date**: Current session
+**Final Decision**: **Non-recursive snapshots** for simplicity and clarity
+
+**Why Non-Recursive is Better**:
+- **Easier to reason about**: Each snapshot is just a clean frozen moment
+- **Simpler debugging**: No complex nested history to trace through
+- **Better performance**: No deep DOM traversal needed
+- **Cleaner restoration**: Just restore specific moment without side effects
+
+**Final Architecture**:
+```html
+<game-world>
+  <!-- Live game state -->
+  <swarm emoji="🐟">...</swarm>
+  <swarm emoji="🐸">...</swarm>
+  
+  <!-- Separate frozen snapshots (siblings, not nested) -->
+  <snapshot name="Magic Pond">
+    <swarm emoji="🐟">...</swarm>
+    <swarm emoji="✨">...</swarm>
+  </snapshot>
+  
+  <snapshot name="Dancing Lights">
+    <swarm emoji="⭐">...</swarm>
+  </snapshot>
+</game-world>
+```
+
+**Technical Implementation**:
+- **Isolation**: Live simulation only affects direct children swarms
+- **Clean capture**: Snapshots contain only live state at that moment  
+- **Preserve history**: Previous snapshots maintained as separate siblings
+- **DOM filtering**: `Array.from(gameWorld.children).filter(child => child.tagName.toLowerCase() === 'swarm')`
+
+**Status**: ✅ Working snapshot system ready for AI integration and collaborative game creation
+
+---
+
 *Update this log as we make progress and decisions. Keep it concise but complete enough for context switching.*
