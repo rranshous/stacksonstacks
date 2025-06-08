@@ -12,7 +12,10 @@ export class DOMSync {
             swarms: []
         };
         
-        const swarms = this.gameWorld.querySelectorAll('swarm');
+        // Only load swarms that are direct children of game-world (not nested in snapshots)
+        const swarms = Array.from(this.gameWorld.children).filter(child => 
+            child.tagName.toLowerCase() === 'swarm'
+        );
         swarms.forEach(swarmEl => {
             const swarm = {
                 element: swarmEl,

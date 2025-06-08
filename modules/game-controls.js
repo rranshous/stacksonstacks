@@ -2,6 +2,9 @@
  * Game Controls - Button event handlers for game interactions
  */
 export function setupGameControls(gameEngine) {
+    // Initialize snapshot gallery with existing snapshots
+    initializeSnapshotGallery();
+    
     // Original test buttons
     document.getElementById('test-ai-btn').addEventListener('click', () => {
         console.log('🧠 Testing AI interaction...');
@@ -131,4 +134,159 @@ export function setupGameControls(gameEngine) {
         });
         console.log('🐛 Added bug party!');
     });
+    
+    // Snapshot functionality (DOM-everything approach)
+    document.getElementById('save-snapshot-btn').addEventListener('click', () => {
+        createSnapshot();
+    });
+    
+    // Create a snapshot using pure DOM approach
+    function createSnapshot() {
+        const gameWorld = document.querySelector('game-world');
+        const gallery = document.getElementById('snapshots-gallery');
+        
+        if (!gameWorld) return;
+        
+        // Debug: Show current live swarms (direct children only)
+        const currentLiveSwarms = Array.from(gameWorld.children).filter(child => 
+            child.tagName.toLowerCase() === 'swarm'
+        );
+        console.log(`📊 Creating snapshot with ${currentLiveSwarms.length} live swarms:`);
+        currentLiveSwarms.forEach((swarm, i) => {
+            const creatures = swarm.querySelectorAll('creature');
+            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures, behavior: ${swarm.getAttribute('behavior')})`);
+        });
+        
+        // Generate a magical name for this moment
+        const names = [
+            'Firefly Dance', 'Zen Pond', 'Magical Swimming', 'Peaceful Waters',
+            'Glowing Night', 'Pond Harmony', 'Sparkle Time', 'Gentle Swim',
+            'Magic Moment', 'Serene Pond', 'Dancing Lights', 'Calm Waters'
+        ];
+        const snapshotName = names[Math.floor(Math.random() * names.length)];
+        
+        // Create snapshot element containing current game state
+        const snapshot = document.createElement('snapshot');
+        snapshot.setAttribute('name', snapshotName);
+        snapshot.setAttribute('created', new Date().toLocaleTimeString());
+        
+        // Deep clone only live swarms (direct children) to prevent mutation
+        const clonedContent = currentLiveSwarms.map(swarm => {
+            const clone = swarm.cloneNode(true);
+            return clone.outerHTML;
+        }).join('\n');
+        
+        snapshot.innerHTML = clonedContent;
+        
+        // Add to game world (nested recursive snapshots)
+        gameWorld.appendChild(snapshot);
+        
+        // Create gallery button for navigation
+        const snapshotBtn = document.createElement('button');
+        snapshotBtn.textContent = `🌟 ${snapshotName}`;
+        snapshotBtn.style.display = 'block';
+        snapshotBtn.style.margin = '3px 0';
+        snapshotBtn.style.fontSize = '10px';
+        snapshotBtn.style.padding = '6px 8px';
+        
+        snapshotBtn.addEventListener('click', () => {
+            restoreSnapshot(snapshotName);
+        });
+        
+        gallery.appendChild(snapshotBtn);
+        
+        console.log(`📸 Saved magical moment: "${snapshotName}" with ${clonedContent.length} chars of frozen content`);
+    }
+    
+    // Restore a snapshot using DOM traversal
+    function restoreSnapshot(snapshotName) {
+        const gameWorld = document.querySelector('game-world');
+        const snapshot = document.querySelector(`snapshot[name="${snapshotName}"]`);
+        
+        if (!snapshot || !gameWorld) {
+            console.log(`❌ Snapshot "${snapshotName}" not found`);
+            return;
+        }
+        
+        console.log(`🔄 Restoring snapshot: "${snapshotName}"`);
+        
+        // Debug: Show current live swarms (direct children only)
+        const currentLiveSwarms = Array.from(gameWorld.children).filter(child => 
+            child.tagName.toLowerCase() === 'swarm'
+        );
+        const snapshotSwarms = snapshot.querySelectorAll('swarm');
+        
+        console.log(`📊 Current live swarms: ${currentLiveSwarms.length}`);
+        currentLiveSwarms.forEach((swarm, i) => {
+            const creatures = swarm.querySelectorAll('creature');
+            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures)`);
+        });
+        
+        console.log(`📸 Snapshot swarms: ${snapshotSwarms.length}`);
+        snapshotSwarms.forEach((swarm, i) => {
+            const creatures = swarm.querySelectorAll('creature');
+            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures)`);
+        });
+        
+        // Preserve all snapshots (remove them from DOM temporarily)
+        const allSnapshots = Array.from(gameWorld.querySelectorAll('snapshot'));
+        console.log(`💾 Preserving ${allSnapshots.length} snapshots`);
+        allSnapshots.forEach(snap => snap.remove());
+        
+        // Remove only live swarms (direct children)
+        currentLiveSwarms.forEach(swarm => swarm.remove());
+        
+        // Restore the snapshot content
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = snapshot.innerHTML;
+        
+        // Add back the restored swarms as direct children
+        Array.from(tempDiv.children).forEach(child => {
+            if (child.tagName.toLowerCase() === 'swarm') {
+                gameWorld.appendChild(child);
+            }
+        });
+        
+        // Add back all preserved snapshots
+        allSnapshots.forEach(snap => {
+            gameWorld.appendChild(snap);
+        });
+        
+        // Debug: Show what we restored
+        const restoredSwarms = gameWorld.querySelectorAll('swarm:not(snapshot swarm)');
+        console.log(`✅ Restored ${restoredSwarms.length} swarms`);
+        restoredSwarms.forEach((swarm, i) => {
+            const creatures = swarm.querySelectorAll('creature');
+            console.log(`  Swarm ${i}: ${swarm.getAttribute('emoji')} (${creatures.length} creatures)`);
+        });
+        
+        console.log(`🌟 Restored to magical moment: "${snapshotName}"`);
+    }
+    
+    // Initialize gallery with existing snapshots in DOM
+    function initializeSnapshotGallery() {
+        const gallery = document.getElementById('snapshots-gallery');
+        const existingSnapshots = document.querySelectorAll('snapshot[name]');
+        
+        existingSnapshots.forEach(snapshot => {
+            const snapshotName = snapshot.getAttribute('name');
+            
+            const snapshotBtn = document.createElement('button');
+            snapshotBtn.textContent = `🌟 ${snapshotName}`;
+            snapshotBtn.style.display = 'block';
+            snapshotBtn.style.margin = '3px 0';
+            snapshotBtn.style.fontSize = '10px';
+            snapshotBtn.style.padding = '6px 8px';
+            
+            snapshotBtn.addEventListener('click', () => {
+                restoreSnapshot(snapshotName);
+            });
+            
+            gallery.appendChild(snapshotBtn);
+        });
+        
+        if (existingSnapshots.length > 0) {
+            console.log(`🌟 Found ${existingSnapshots.length} existing magical moments`);
+        }
+    }
 }

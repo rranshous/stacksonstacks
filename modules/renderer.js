@@ -58,4 +58,35 @@ export class Renderer {
         this.ctx.stroke();
         this.ctx.restore();
     }
+    
+    /**
+     * Capture a thumbnail of the current canvas state
+     * @param {number} width - Thumbnail width
+     * @param {number} height - Thumbnail height
+     * @returns {string} Data URL of the thumbnail image
+     */
+    captureCanvasThumbnail(width = 80, height = 60) {
+        try {
+            // Create a temporary canvas for the thumbnail
+            const thumbCanvas = document.createElement('canvas');
+            thumbCanvas.width = width;
+            thumbCanvas.height = height;
+            const thumbCtx = thumbCanvas.getContext('2d');
+            
+            // Draw the main canvas scaled down to thumbnail size
+            thumbCtx.drawImage(
+                this.ctx.canvas, 
+                0, 0, this.ctx.canvas.width, this.ctx.canvas.height,
+                0, 0, width, height
+            );
+            
+            // Return as data URL for easy storage
+            return thumbCanvas.toDataURL('image/png');
+            
+        } catch (error) {
+            console.error('Failed to capture canvas thumbnail:', error);
+            // Return a placeholder data URL
+            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+        }
+    }
 }

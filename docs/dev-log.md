@@ -4,6 +4,56 @@
 
 ## 📅 Current Session - June 6, 2025
 
+### 🎨 **JITTER REDUCTION: Calmer Pond Creatures**
+**Date**: Current session
+**Issue**: Fish were exploring more but had become too jittery/nervous
+
+**Fish Wandering Improvements**:
+- **Less Frequent Direction Changes**: 30-90 frames instead of 20-60 for calmer movement
+- **Reduced Direction Change Magnitude**: 3.0x instead of 4.0x for gentler turns
+- **Minimal Continuous Jitter**: Back to 0.02 from 0.1 for smooth curves
+- **Better Persistence Balance**: 60-80% instead of 50-70% for smoother flow
+- **Gentle Momentum**: Reduced from 0.1 to 0.05 for less nervousness
+- **Higher Speed Limit**: Increased to 1.8x for more exploration distance
+
+**Frog Seeking Improvements**:
+- **Much Calmer Hopping**: Reduced jitter from 0.3 to 0.1 for graceful movement
+- **Smoother Target Approach**: Less frantic, more deliberate hopping
+
+**Result**: 
+- Fish now explore the entire pond with calm, flowing movements
+- Frogs hop gracefully toward clicked targets without nervous energy
+- Maintains exploration while achieving zen-like serenity
+
+**Balance Achieved**: Exploration + Calmness = Perfect Magic Pond! 🌙
+
+**Next**: Test the balanced, serene ecosystem!
+
+---
+
+### 🎨 **WANDERING FIX: True Fish Exploration**
+**Date**: Current session
+**Issue**: Fish were "nervous hovering" instead of actually wandering around the pond
+
+**Changes Made**:
+- **Much More Frequent Direction Changes**: 20-60 frames instead of 40-120 
+- **Bigger Direction Changes**: 4.0x jitteriness factor instead of 2.5x for dramatic turns
+- **Much Less Direction Persistence**: 50-70% instead of 75%+ to break free from starting areas  
+- **More Continuous Adjustments**: 0.1 instead of 0.05 for active movement
+- **Added Momentum**: 0.1 gentle push to keep them moving even during direction changes
+- **Higher Speed Limit**: 1.5x speed limit to allow faster exploration
+
+**Technical Explanation**:
+- **Old Behavior**: High persistence meant fish kept mostly their original direction
+- **New Behavior**: Low persistence + frequent big changes = true exploration
+- **Momentum Addition**: Prevents fish from getting "stuck" during direction transitions
+
+**Result**: Fish should now swim throughout the entire pond area instead of staying near starting positions.
+
+**Next**: Test the enhanced fish wandering behavior!
+
+---
+
 ### 🎨 **BEHAVIOR TUNING: Magic Pond Improvements**
 **Date**: Current session
 **Issues**: Fish too clustered, fireflies too far/fast, need to understand swarm behavior
@@ -35,33 +85,52 @@
 
 ---
 
-### 🌙 **DEMO CHANGE: Magic Pond Ecosystem**
+### 🎣 **BEHAVIOR TUNING: Zen Fish & Calm Frogs**
+**Date**: Current session  
+**Issue**: Fish exhibiting nervous, jittery behavior instead of confident exploration; frogs too frantic when seeking targets
+
+**Fish Calming Changes**:
+- **Jitter Reduction**: Continuous angle adjustments reduced from 0.02 → 0.01 for smoother gliding
+- **Exploration Confidence**: Direction change frequency reduced (30-90 frames → 60-180 frames) for longer, bolder swimming paths
+- **Movement Persistence**: Increased from 60-80% → 75-90% for more committed directional movement
+- **Momentum**: Reduced from 0.05 → 0.02 to eliminate micro-jitters while maintaining gentle propulsion
+
+**Frog Calming Changes**:  
+- **Seek Jitter**: Reduced from 0.1 → 0.05 for more deliberate, less frantic hopping toward targets
+- **Movement Style**: Changed from "frantic hopping" to "calm, deliberate hops" in code comments
+
+**Expected Result**: Fish now swim in confident, flowing arcs across the pond instead of nervous hovering. Frogs make purposeful hops toward targets rather than anxious twitching.
+
+**Next**: Test the zen pond experience!
+
+---
+
+### 📸 **SNAPSHOT SYSTEM: DOM-Everything Approach**
 **Date**: Current session
-**Choice**: User selected "Magic Pond" demo over Cat & Mouse or Ecosystem options
+**Implementation**: Pure DOM-based snapshot system following the original seed architecture
 
-**New Default State**:
-- **Fish (🐟)**: 4 fish swimming gently in center pond with wander behavior
-- **Frogs (🐸)**: 3 frogs positioned around pond edges with seek-targets behavior
-- **Fireflies (✨)**: 5 fireflies that orbit around mouse cursor for magical effect
+**Core Design**:
+- **Snapshots are `<snapshot>` DOM elements** - no separate modules or complex systems
+- **Recursive state preservation** - snapshots contain complete game state as nested HTML
+- **Navigation via DOM traversal** - restore by copying `snapshot.innerHTML` to `game-world.innerHTML`
+- **Organic gallery creation** - buttons auto-generated from existing snapshots in DOM
 
-**Interactions**:
-- **Mouse Movement**: Fireflies follow and orbit around cursor creating light trails
-- **Click to Place**: Lily pads/targets that frogs hop toward
-- **Peaceful Center**: Fish swim in flowing patterns in the pond center
-- **Serene Vibe**: Zen-like, magical atmosphere perfect for voice commands
+**Features Implemented**:
+- **📸 Save Moment Button**: Creates `<snapshot>` elements with magical random names
+- **🌟 Snapshot Gallery**: Auto-populates with buttons for each existing snapshot
+- **🔄 One-Click Restore**: Click any snapshot button to instantly restore that state
+- **♻️ Recursive Architecture**: New snapshots contain all previous snapshots (infinite nesting)
 
-**Updated Instructions**:
-- "Move mouse to guide fireflies ✨"
-- "Click pond for frogs to hop there 🐸" 
-- "Fish swim peacefully in center 🐟"
+**Magic Pond as First Snapshot**:
+- Pre-embedded "Magic Pond" snapshot in HTML as the foundation moment
+- Gallery shows "🌟 Magic Pond" button on page load
+- Users can return to zen state anytime, then build from there
 
-**Benefits**:
-- **Immediately Magical**: Shows off the enchanting potential
-- **Multiple Interaction Types**: Orbital, seeking, and wandering behaviors
-- **Perfect for Voice**: "Add more fireflies" or "make the fish dance"
-- **Calming**: Creates a peaceful environment for creativity
+**Code Files**:
+- `game-controls.js` - Added `createSnapshot()`, `restoreSnapshot()`, `initializeSnapshotGallery()`
+- `index.html` - Added snapshot gallery UI and recursive `<snapshot>` element
 
-**Next**: Test the magic pond ecosystem and feel the zen vibes!
+**Next**: Test the snapshot system and add more magical moments!
 
 ---
 
@@ -137,7 +206,7 @@
 - **Immediate Feedback**: See creatures react to button clicks instantly
 - **Better Workflow**: Mouse interactions and button controls side-by-side
 - **Professional Layout**: More app-like, less webpage-like
-- **Scalable**: Easy to add more controls without affecting canvas view
+- **Scalable**: Easy to add new controls without affecting canvas view
 
 **Next Step**: Test the improved layout and mouse interactions.
 
@@ -174,7 +243,7 @@
 - **Extensible**: Easy to add new behaviors or rendering effects
 - **Organized**: Button controls separated from core engine logic
 
-**Files**:
+**Files**: 
 - All modules in `/modules/` directory
 - `game-engine-v3.js` - New main engine
 - Updated `index.html` to use ES6 modules

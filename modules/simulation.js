@@ -87,33 +87,32 @@ export class Simulation {
         // Update wander timer
         personality.wanderTimer += 1;
         
-        // More frequent direction changes for fish to spread out more
-        if (personality.wanderTimer > (40 + Math.random() * 80)) {
-            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 2.5;
+        // Much less frequent direction changes for confident exploration
+        if (personality.wanderTimer > (60 + Math.random() * 120)) {
+            personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 2.0;
             personality.wanderTimer = 0;
         }
         
-        // Slightly more continuous adjustments to encourage exploration
-        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.05;
+        // Barely any continuous adjustments - smooth confident gliding
+        personality.wanderAngle += (Math.random() - 0.5) * personality.jitteriness * 0.01;
         
         // Calculate target velocity from wander angle
         const targetSpeed = speed * personality.speedVariation;
         const targetVx = Math.cos(personality.wanderAngle) * targetSpeed;
         const targetVy = Math.sin(personality.wanderAngle) * targetSpeed;
         
-        // Slightly less persistence to allow more wandering
-        const persistence = Math.max(0.75, personality.directionPersistence);
+        // High persistence for smooth confident movement
+        const persistence = Math.max(0.75, personality.directionPersistence * 0.9);
         creature.vx = creature.vx * persistence + targetVx * (1 - persistence);
         creature.vy = creature.vy * persistence + targetVy * (1 - persistence);
         
-        // Minimal micro-jitter - only for very jittery personalities
-        if (personality.jitteriness > 0.8) {
-            creature.vx += (Math.random() - 0.5) * (personality.jitteriness - 0.8) * 0.1;
-            creature.vy += (Math.random() - 0.5) * (personality.jitteriness - 0.8) * 0.1;
-        }
+        // Minimal momentum for gentle propulsion without jitter
+        const momentum = 0.02;
+        creature.vx += (Math.random() - 0.5) * momentum;
+        creature.vy += (Math.random() - 0.5) * momentum;
         
         // Limit speed to prevent runaway acceleration
-        this.limitSpeed(creature, speed);
+        this.limitSpeed(creature, speed * 1.8); // Higher limit for more exploration
     }
     
     chaseBehavior(creature, speed) {
@@ -216,10 +215,10 @@ export class Simulation {
                 creature.vx = (dx / distance) * speed * speedMod;
                 creature.vy = (dy / distance) * speed * speedMod;
                 
-                // Add seeking excitement jitter
+                // Very gentle seeking movement - calm, deliberate hops
                 const jitter = creature.personality?.jitteriness || 0.5;
-                creature.vx += (Math.random() - 0.5) * jitter * 0.3;
-                creature.vy += (Math.random() - 0.5) * jitter * 0.3;
+                creature.vx += (Math.random() - 0.5) * jitter * 0.05;
+                creature.vy += (Math.random() - 0.5) * jitter * 0.05;
             }
         }
     }

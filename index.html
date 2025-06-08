@@ -123,6 +123,23 @@
             margin: 0 0 20px 0;
             font-size: 24px;
         }
+        
+        #snapshots-gallery {
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        #snapshots-gallery button {
+            width: 100%;
+            text-align: left;
+            background: #1a3a1a;
+            border: 1px solid #2a5a2a;
+        }
+        
+        #snapshots-gallery button:hover {
+            background: #2a4a2a;
+        }
     </style>
 </head>
 <body>
@@ -178,6 +195,12 @@
                 </div>
                 
                 <div class="control-section">
+                    <h4>📸 Magical Moments</h4>
+                    <button id="save-snapshot-btn">📸 Save Moment</button>
+                    <div id="snapshots-gallery"></div>
+                </div>
+                
+                <div class="control-section">
                     <h4>🧹 Clear World</h4>
                     <button id="clear-world-btn">🧹 Clear Creatures</button>
                     <button id="clear-swarms-btn">💨 Clear All</button>
@@ -223,6 +246,30 @@
             <creature x="500" y="80" vx="-0.5" vy="0.9"></creature>
             <creature x="600" y="520" vx="0.9" vy="-0.6"></creature>
         </swarm>
+        
+        <!-- Recursive snapshot: Magic Pond as the first moment -->
+        <snapshot name="Magic Pond" created="zen-moment">
+            <swarm emoji="🐟" count="4" behavior="wander" speed="1.2">
+                <creature x="350" y="280" vx="0.5" vy="0.2"></creature>
+                <creature x="420" y="320" vx="-0.3" vy="0.4"></creature>
+                <creature x="380" y="350" vx="0.7" vy="-0.1"></creature>
+                <creature x="450" y="300" vx="-0.4" vy="-0.3"></creature>
+            </swarm>
+            
+            <swarm emoji="🐸" count="3" behavior="seek-targets" speed="2.0">
+                <creature x="150" y="200" vx="0" vy="0"></creature>
+                <creature x="650" y="180" vx="0" vy="0"></creature>
+                <creature x="200" y="450" vx="0" vy="0"></creature>
+            </swarm>
+            
+            <swarm emoji="✨" count="5" behavior="orbit" speed="1.2">
+                <creature x="100" y="100" vx="1" vy="0.5"></creature>
+                <creature x="700" y="120" vx="-0.8" vy="0.7"></creature>
+                <creature x="300" y="500" vx="0.6" vy="-0.4"></creature>
+                <creature x="500" y="80" vx="-0.5" vy="0.9"></creature>
+                <creature x="600" y="520" vx="0.9" vy="-0.6"></creature>
+            </swarm>
+        </snapshot>
     </game-world>
 
     <script type="module">
