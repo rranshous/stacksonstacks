@@ -66,4 +66,18 @@ export class DOMTools {
         
         return swarm;
     }
+    
+    createObstacle(gameWorld, emoji, x, y, width, height, behavior = 'static', collision = 'solid') {
+        const obstacle = this.createElement(gameWorld, 'obstacle', {
+            emoji,
+            x,
+            y,
+            width,
+            height,
+            behavior,
+            collision
+        });
+        
+        return obstacle;
+    }
 }

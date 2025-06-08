@@ -135,6 +135,22 @@ export function setupGameControls(gameEngine) {
         console.log('🐛 Added bug party!');
     });
     
+    // Obstacle creation buttons
+    document.getElementById('add-rock-btn')?.addEventListener('click', () => {
+        gameEngine.createObstacle('🗿', Math.random() * 700 + 50, Math.random() * 500 + 50, 60, 60, 'static', 'solid');
+        console.log('🗿 Added solid rock obstacle!');
+    });
+    
+    document.getElementById('add-tree-btn')?.addEventListener('click', () => {
+        gameEngine.createObstacle('🌲', Math.random() * 700 + 50, Math.random() * 500 + 50, 40, 80, 'static', 'solid');
+        console.log('🌲 Added tree obstacle!');
+    });
+    
+    document.getElementById('add-spinning-btn')?.addEventListener('click', () => {
+        gameEngine.createObstacle('🌀', Math.random() * 700 + 50, Math.random() * 500 + 50, 50, 50, 'rotating', 'solid');
+        console.log('🌀 Added spinning obstacle!');
+    });
+    
     // Snapshot functionality (DOM-everything approach)
     document.getElementById('save-snapshot-btn').addEventListener('click', () => {
         createSnapshot();

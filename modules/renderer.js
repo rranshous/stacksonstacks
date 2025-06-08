@@ -11,6 +11,11 @@ export class Renderer {
         this.ctx.fillStyle = '#111';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         
+        // Draw obstacles first (behind creatures)
+        if (gameState.obstacles) {
+            gameState.obstacles.forEach(obstacle => this.drawObstacle(obstacle));
+        }
+        
         // Render mouse targets
         this.renderMouseTargets(simulation.mouseTargets);
         
@@ -88,5 +93,52 @@ export class Renderer {
             // Return a placeholder data URL
             return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
         }
+    }
+    
+    drawMouseTargets() {
+        // Draw fading target rings where user clicked
+        this.mouseTargets.forEach(target => {
+            const alpha = target.life / 100;
+            this.ctx.save();
+            this.ctx.globalAlpha = alpha;
+            this.ctx.strokeStyle = '#ff6b6b';
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.arc(target.x, target.y, 15, 0, Math.PI * 2);
+            this.ctx.stroke();
+            this.ctx.restore();
+        });
+    }
+    
+    drawObstacle(obstacle) {
+        this.ctx.save();
+        
+        // Move to obstacle center for rotation
+        const centerX = obstacle.x + obstacle.width / 2;
+        const centerY = obstacle.y + obstacle.height / 2;
+        this.ctx.translate(centerX, centerY);
+        
+        // Apply rotation if obstacle has it
+        if (obstacle.rotation) {
+            this.ctx.rotate(obstacle.rotation * Math.PI / 180);
+        }
+        
+        // Draw obstacle background (slightly transparent)
+        this.ctx.fillStyle = 'rgba(100, 100, 100, 0.3)';
+        this.ctx.fillRect(-obstacle.width/2, -obstacle.height/2, obstacle.width, obstacle.height);
+        
+        // Draw obstacle border
+        this.ctx.strokeStyle = '#666';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(-obstacle.width/2, -obstacle.height/2, obstacle.width, obstacle.height);
+        
+        // Draw obstacle emoji in center
+        this.ctx.font = `${Math.min(obstacle.width, obstacle.height) * 0.6}px Arial`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(obstacle.emoji, 0, 0);
+        
+        this.ctx.restore();
     }
 }

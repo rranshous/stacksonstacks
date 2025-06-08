@@ -29,8 +29,18 @@ export class Simulation {
         gameState.swarms.forEach(swarm => {
             swarm.creatures.forEach(creature => {
                 this.updateCreature(creature, swarm.behavior, swarm.speed, deltaTime);
+                
+                // Check collisions with obstacles after movement
+                this.checkObstacleCollisions(creature, gameState.obstacles || []);
             });
         });
+        
+        // Update obstacles (for moving/rotating ones)
+        if (gameState.obstacles) {
+            gameState.obstacles.forEach(obstacle => {
+                this.updateObstacle(obstacle, deltaTime);
+            });
+        }
         
         return gameState;
     }
@@ -228,6 +238,111 @@ export class Simulation {
         if (currentSpeed > maxSpeed) {
             creature.vx = (creature.vx / currentSpeed) * maxSpeed;
             creature.vy = (creature.vy / currentSpeed) * maxSpeed;
+        }
+    }
+    
+    // Obstacle system
+    updateObstacle(obstacle, deltaTime) {
+        // Update obstacle based on its behavior
+        switch (obstacle.behavior) {
+            case 'static':
+                // Do nothing - stays in place
+                break;
+                
+            case 'rotating':
+                // Rotate the obstacle (visual effect for renderer)
+                obstacle.rotation = (obstacle.rotation || 0) + 2; // degrees per frame
+                break;
+                
+            case 'moving':
+                // Simple back-and-forth movement (can be enhanced later)
+                if (!obstacle.moveDirection) obstacle.moveDirection = 1;
+                obstacle.x += obstacle.moveDirection * 0.5;
+                if (obstacle.x > this.bounds.width - obstacle.width || obstacle.x < 0) {
+                    obstacle.moveDirection *= -1;
+                }
+                break;
+        }
+    }
+    
+    checkObstacleCollisions(creature, obstacles) {
+        obstacles.forEach(obstacle => {
+            if (this.isColliding(creature, obstacle)) {
+                this.handleCollision(creature, obstacle);
+            }
+        });
+    }
+    
+    isColliding(creature, obstacle) {
+        // Simple rectangular collision detection
+        // Creature is treated as a small rectangle around its position
+        const creatureSize = 20; // Creature hit-box size
+        const creatureLeft = creature.x - creatureSize / 2;
+        const creatureRight = creature.x + creatureSize / 2;
+        const creatureTop = creature.y - creatureSize / 2;
+        const creatureBottom = creature.y + creatureSize / 2;
+        
+        const obstacleLeft = obstacle.x;
+        const obstacleRight = obstacle.x + obstacle.width;
+        const obstacleTop = obstacle.y;
+        const obstacleBottom = obstacle.y + obstacle.height;
+        
+        return !(creatureRight < obstacleLeft || 
+                creatureLeft > obstacleRight || 
+                creatureBottom < obstacleTop || 
+                creatureTop > obstacleBottom);
+    }
+    
+    handleCollision(creature, obstacle) {
+        // Handle different collision types
+        switch (obstacle.collision || 'solid') {
+            case 'solid':
+                this.handleSolidCollision(creature, obstacle);
+                break;
+                
+            // Future collision types will go here:
+            // case 'bounce': this.handleBounceCollision(creature, obstacle); break;
+            // case 'slow': this.handleSlowCollision(creature, obstacle); break;
+        }
+    }
+    
+    handleSolidCollision(creature, obstacle) {
+        // Push creature back to previous position (simple solid collision)
+        // Calculate which side of the obstacle the creature hit
+        const creatureSize = 20;
+        const centerX = creature.x;
+        const centerY = creature.y;
+        
+        const obstacleLeft = obstacle.x;
+        const obstacleRight = obstacle.x + obstacle.width;
+        const obstacleTop = obstacle.y;
+        const obstacleBottom = obstacle.y + obstacle.height;
+        
+        // Calculate overlap on each axis
+        const overlapLeft = (centerX + creatureSize/2) - obstacleLeft;
+        const overlapRight = obstacleRight - (centerX - creatureSize/2);
+        const overlapTop = (centerY + creatureSize/2) - obstacleTop;
+        const overlapBottom = obstacleBottom - (centerY - creatureSize/2);
+        
+        // Find the smallest overlap to determine collision side
+        const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+        
+        if (minOverlap === overlapLeft) {
+            // Hit left side - push creature left
+            creature.x = obstacleLeft - creatureSize/2;
+            creature.vx = 0; // Stop horizontal movement
+        } else if (minOverlap === overlapRight) {
+            // Hit right side - push creature right
+            creature.x = obstacleRight + creatureSize/2;
+            creature.vx = 0;
+        } else if (minOverlap === overlapTop) {
+            // Hit top side - push creature up
+            creature.y = obstacleTop - creatureSize/2;
+            creature.vy = 0; // Stop vertical movement
+        } else if (minOverlap === overlapBottom) {
+            // Hit bottom side - push creature down
+            creature.y = obstacleBottom + creatureSize/2;
+            creature.vy = 0;
         }
     }
 }

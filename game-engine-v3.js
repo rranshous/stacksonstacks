@@ -131,4 +131,8 @@ export class GameEngine {
     createSwarm(emoji, behavior, speed = 2, count = 1) {
         return this.domTools.createSwarm(this.gameWorld, emoji, behavior, speed, count);
     }
+    
+    createObstacle(emoji, x, y, width, height, behavior = 'static', collision = 'solid') {
+        return this.domTools.createObstacle(this.gameWorld, emoji, x, y, width, height, behavior, collision);
+    }
 }
