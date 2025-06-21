@@ -209,6 +209,20 @@ The goal isn't to teach coding - it's to demonstrate **creative partnership with
 4. **Move your mouse**: Watch the cat swarm flee while the dog chases
 5. **Make them collide**: Guide the dog to catch a cat and see the win celebration!
 
+## 📦 Publishing
+
+Ready to share your game? We've got you covered:
+
+```bash
+# Build for itch.io distribution
+npm run build:itch
+
+# Preview the build locally to test
+npm run preview
+```
+
+The build creates a standalone HTML5 game bundle in `dist/` that works without a server. Perfect for uploading to [itch.io](https://itch.io) or sharing anywhere!
+
 ---
 
 *Built with ❤️ for creative collaboration between humans and AI*
